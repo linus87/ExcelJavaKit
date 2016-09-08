@@ -1,0 +1,397 @@
+[
+    {
+        "api_Name": "Category_base__c",
+        "isUnique": false,
+        "fieldtype": {
+            "typeName": "STRING",
+            "picklistEntry": "",
+            "percision": 0,
+            "length": 200,
+            "digits": 0
+        },
+        "currencyType": "",
+        "display": false,
+        "displayLabel": [
+            {
+                "isDefault": true,
+                "labelName": "編號",
+                "locale": "CN",
+                "localDisplayName": "中国大陆"
+            },
+            {
+                "isDefault": false,
+                "labelName": "123",
+                "locale": "HK",
+                "localDisplayName": "香港/台湾"
+            },
+            {
+                "isDefault": false,
+                "labelName": "123",
+                "locale": "TW",
+                "localDisplayName": "香港/台湾"
+            }
+        ],
+        "required": false,
+        "labelName": "Category",
+        "attachmentType": null,
+        "input": true
+    },
+    {
+        "api_Name": "Listing_Local_Currency_base__c",
+        "isUnique": false,
+        "fieldtype": {
+            "typeName": "STRING",
+            "picklistEntry": "",
+            "percision": 0,
+            "length": 10,
+            "digits": 0
+        },
+        "currencyType": "",
+        "display": false,
+        "displayLabel": [
+            {
+                "isDefault": true,
+                "labelName": "編號",
+                "locale": "CN",
+                "localDisplayName": "中国大陆"
+            },
+            {
+                "isDefault": false,
+                "labelName": "123",
+                "locale": "HK",
+                "localDisplayName": "香港/台湾"
+            },
+            {
+                "isDefault": false,
+                "labelName": "123",
+                "locale": "TW",
+                "localDisplayName": "香港/台湾"
+            }
+        ],
+        "required": false,
+        "labelName": "Listing Local Currency",
+        "attachmentType": null,
+        "input": true
+    },
+    {
+        "api_Name": "Original_Price_Local_Currency_base__c",
+        "isUnique": false,
+        "fieldtype": {
+            "typeName": "DOUBLE",
+            "picklistEntry": "",
+            "percision": 10,
+            "length": 0,
+            "digits": 2
+        },
+        "currencyType": "Local Currency",
+        "display": false,
+        "displayLabel": [
+            {
+                "isDefault": true,
+                "labelName": "123",
+                "locale": "CN",
+                "localDisplayName": "中国大陆"
+            },
+            {
+                "isDefault": false,
+                "labelName": "123",
+                "locale": "HK",
+                "localDisplayName": "香港/台湾"
+            },
+            {
+                "isDefault": false,
+                "labelName": "123",
+                "locale": "TW",
+                "localDisplayName": "香港/台湾"
+            }
+        ],
+        "required": false,
+        "labelName": "Original Price_Local Currency",
+        "attachmentType": null,
+        "input": true
+    },
+    {
+        "api_Name": "Propose_Price_Local_Currency_base__c",
+        "isUnique": false,
+        "fieldtype": {
+            "typeName": "DOUBLE",
+            "picklistEntry": "",
+            "percision": 10,
+            "length": 0,
+            "digits": 2
+        },
+        "currencyType": "Local Currency",
+        "display": false,
+        "displayLabel": [
+            {
+                "isDefault": true,
+                "labelName": "123",
+                "locale": "CN",
+                "localDisplayName": "中国大陆"
+            },
+            {
+                "isDefault": false,
+                "labelName": "123",
+                "locale": "HK",
+                "localDisplayName": "香港/台湾"
+            },
+            {
+                "isDefault": false,
+                "labelName": "123",
+                "locale": "TW",
+                "localDisplayName": "香港/台湾"
+            }
+        ],
+        "required": false,
+        "labelName": "Propose Price_Local Currency",
+        "attachmentType": null,
+        "input": true
+    },
+    {
+        "api_Name": "Seller_Standard_base__c",
+        "isUnique": false,
+        "fieldtype": {
+            "typeName": "PICKLIST",
+            "picklistEntry": "eTRS;ASTD;BSTD;",
+            "percision": 0,
+            "length": 255,
+            "digits": 0
+        },
+        "currencyType": "",
+        "display": false,
+        "displayLabel": [
+            {
+                "isDefault": true,
+                "labelName": "123",
+                "locale": "CN",
+                "localDisplayName": "中国大陆"
+            },
+            {
+                "isDefault": false,
+                "labelName": "123",
+                "locale": "HK",
+                "localDisplayName": "香港/台湾"
+            },
+            {
+                "isDefault": false,
+                "labelName": "123",
+                "locale": "TW",
+                "localDisplayName": "香港/台湾"
+            }
+        ],
+        "required": false,
+        "labelName": "Seller Standard",
+        "attachmentType": null,
+        "input": true
+    },
+    {
+        "api_Name": "Site_base__c",
+        "isUnique": false,
+        "fieldtype": {
+            "typeName": "MULTIPICKLIST",
+            "picklistEntry": "1;2;3",
+            "percision": 0,
+            "length": 100,
+            "digits": 0
+        },
+        "currencyType": "",
+        "display": false,
+        "displayLabel": [
+            {
+                "isDefault": true,
+                "labelName": "123",
+                "locale": "CN",
+                "localDisplayName": "中国大陆"
+            },
+            {
+                "isDefault": false,
+                "labelName": "123",
+                "locale": "HK",
+                "localDisplayName": "香港/台湾"
+            },
+            {
+                "isDefault": false,
+                "labelName": "123",
+                "locale": "TW",
+                "localDisplayName": "香港/台湾"
+            }
+        ],
+        "required": false,
+        "labelName": "Site",
+        "attachmentType": null,
+        "input": true
+    },
+    {
+        "api_Name": "date_base__c",
+        "isUnique": false,
+        "fieldtype": {
+            "typeName": "DATE",
+            "picklistEntry": "",
+            "percision": 0,
+            "length": 0,
+            "digits": 0
+        },
+        "currencyType": "",
+        "display": false,
+        "displayLabel": [
+            {
+                "isDefault": true,
+                "labelName": "123",
+                "locale": "CN",
+                "localDisplayName": "中国大陆"
+            },
+            {
+                "isDefault": false,
+                "labelName": "123",
+                "locale": "HK",
+                "localDisplayName": "香港/台湾"
+            },
+            {
+                "isDefault": false,
+                "labelName": "123",
+                "locale": "TW",
+                "localDisplayName": "香港/台湾"
+            }
+        ],
+        "required": false,
+        "labelName": "date base",
+        "attachmentType": null,
+        "input": true
+    },
+    {
+        "api_Name": "datetime_base__c",
+        "isUnique": false,
+        "fieldtype": {
+            "typeName": "DATETIME",
+            "picklistEntry": "",
+            "percision": 0,
+            "length": 0,
+            "digits": 0
+        },
+        "currencyType": "",
+        "display": false,
+        "displayLabel": [
+            {
+                "isDefault": true,
+                "labelName": "123",
+                "locale": "CN",
+                "localDisplayName": "中国大陆"
+            },
+            {
+                "isDefault": false,
+                "labelName": "123",
+                "locale": "HK",
+                "localDisplayName": "香港/台湾"
+            },
+            {
+                "isDefault": false,
+                "labelName": "123",
+                "locale": "TW",
+                "localDisplayName": "香港/台湾"
+            }
+        ],
+        "required": false,
+        "labelName": "datetime base",
+        "attachmentType": null,
+        "input": true
+    },
+    {
+        "api_Name": "Final_Subsidy_deal__c",
+        "isUnique": false,
+        "fieldtype": {
+            "typeName": "PERCENT",
+            "picklistEntry": "",
+            "percision": 17,
+            "length": 0,
+            "digits": 2
+        },
+        "currencyType": "",
+        "display": false,
+        "displayLabel": [
+            {
+                "isDefault": true,
+                "labelName": "123",
+                "locale": "CN",
+                "localDisplayName": "中国大陆"
+            },
+            {
+                "isDefault": false,
+                "labelName": "123",
+                "locale": "HK",
+                "localDisplayName": "香港/台湾"
+            },
+            {
+                "isDefault": false,
+                "labelName": "123",
+                "locale": "TW",
+                "localDisplayName": "香港/台湾"
+            }
+        ],
+        "required": false,
+        "labelName": "Final Subsidy %",
+        "attachmentType": null,
+        "input": true
+    },
+    {
+        "api_Name": "account_item_attachment_1__c",
+        "fieldtype": null,
+        "isUnique": false,
+        "currencyType": null,
+        "display": false,
+        "displayLabel": [
+            {
+                "isDefault": true,
+                "labelName": "123",
+                "locale": "CN",
+                "localDisplayName": "中国大陆"
+            },
+            {
+                "isDefault": false,
+                "labelName": "123",
+                "locale": "HK",
+                "localDisplayName": "香港/台湾"
+            },
+            {
+                "isDefault": false,
+                "labelName": "123",
+                "locale": "TW",
+                "localDisplayName": "香港/台湾"
+            }
+        ],
+        "required": false,
+        "labelName": "Account Item Attachment 1",
+        "attachmentType": "account_item",
+        "input": true
+    },
+    {
+        "api_Name": "account_item_attachment_3__c",
+        "isUnique": false,
+        "fieldtype": null,
+        "currencyType": null,
+        "display": false,
+        "displayLabel": [
+            {
+                "isDefault": true,
+                "labelName": "123",
+                "locale": "CN",
+                "localDisplayName": "中国大陆"
+            },
+            {
+                "isDefault": false,
+                "labelName": "123",
+                "locale": "HK",
+                "localDisplayName": "香港/台湾"
+            },
+            {
+                "isDefault": false,
+                "labelName": "123",
+                "locale": "TW",
+                "localDisplayName": "香港/台湾"
+            }
+        ],
+        "required": false,
+        "labelName": "Account Item Attachment 3",
+        "attachmentType": "account_item",
+        "input": true
+    }
+]
