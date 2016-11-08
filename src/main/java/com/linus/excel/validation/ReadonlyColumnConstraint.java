@@ -9,7 +9,7 @@ public class ReadonlyColumnConstraint extends ColumnConstraint {
 
 	public ReadonlyColumnConstraint() {
 		super();
-		this.message = "excel.valiation.readonly.message";
+		this.message = "excel.validation.readonly.message";
 	}
 
 	public boolean isValid(Object value) {

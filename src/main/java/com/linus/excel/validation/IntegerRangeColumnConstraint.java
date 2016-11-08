@@ -10,14 +10,15 @@ public class IntegerRangeColumnConstraint extends ColumnConstraint {
 
 	public IntegerRangeColumnConstraint() {
 		super();
-		this.message = "excel.valiation.integerrange.message";
+		this.message = "excel.validation.integerrange.message";
 	}
 
 	@Override
 	public boolean isValid(Object value) {
 		if (value != null) {
 			try {
-				Integer v = Integer.parseInt(value.toString());
+				Double d = Double.parseDouble(value.toString());
+				int v = d.intValue();
 				return (v >= min && v <=max);
 			} catch (NumberFormatException e) {
 				return false;

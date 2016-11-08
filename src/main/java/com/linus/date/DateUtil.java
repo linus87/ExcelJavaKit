@@ -11,9 +11,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * All kinds of date operation.
+ * This class includes following date and time format: yyyy-MM-dd, yyyy/MM/dd, yyyy.MM.dd, yyyy-MM-dd HH:mm:ss, yyyy-MM-dd'T'HH:mm:ss.SSS'Z', HH:mm:ss.
  * 
- * @author lyan2
+ * @author linus.yan@hotmail.com
  */
 public class DateUtil {
 	private static final Logger logger = Logger.getLogger(DateUtil.class.getName());
@@ -326,9 +326,7 @@ public class DateUtil {
 				try {
 					date = getDotDateFormat().parse(text);
 				} catch (ParseException e3) {
-					logger.log(Level.WARNING,
-							"Failed to parse text into Date object. Inputted text is: "
-									+ text);
+					logger.log(Level.WARNING, "Failed to parse text into Date object. Inputted text is: " + text);
 				}
 			}
 		}

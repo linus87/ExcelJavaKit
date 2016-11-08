@@ -13,7 +13,7 @@ public class PatternColumnConstraint extends ColumnConstraint {
 	public PatternColumnConstraint(Pattern pattern) {
 		super();
 		this.pattern = pattern;
-		this.message = "excel.valiation.pattern.message";
+		this.message = "excel.validation.pattern.message";
 	}
 
 	public boolean isValid(Object value) {

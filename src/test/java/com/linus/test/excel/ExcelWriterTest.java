@@ -38,6 +38,7 @@ public class ExcelWriterTest {
 		bundle = ResourceBundle.getBundle("ExcelValidationMessages") ;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testWriter() throws IOException {
 		File file = new File("excel/template.xlsx");
@@ -53,25 +54,9 @@ public class ExcelWriterTest {
 		adjustColumnConfigurations(configs);
 		
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		Map<String, Object> map = new HashMap<String, Object>();
 		
-		list = mapper.readValue("[{\"skuId\":\"a1qO0000001KVV3IAO\",\"skuName\":\"superman_2015 iKross 360掳 Car Air Vent Mount Cradle Holder Stand For Mobile Phone Cell Phone\",\"itemId\":\"6462738543254355738373746\",\"itemTitle\":null,\"currPrice\":{\"value\":34,\"currency\":\"USD\"},\"dealsPrice\":null,\"proposePrice\":null,\"stockNum\":null,\"stockReadyDate\":null,\"currency\":\"USD\",\"state\":null},{\"skuId\":\"a1qO0000001KVV2IAO\",\"skuName\":\"superman_2015 iKross 360掳 Car Air Vent Mount Cradle Holder Stand For Mobile Phone Cell Phone\",\"itemId\":null,\"itemTitle\":null,\"currPrice\":null,\"dealsPrice\":null,\"proposePrice\":null,\"stockNum\":null,\"stockReadyDate\":null,\"currency\":\"USD\",\"state\":null}]", List.class);
+		list = mapper.readValue("[{\"skuId\":\"a1qO0000001KVV3IAO\",\"skuName\":\"superman_2015 iKross 360掳 Car Air Vent Mount Cradle Holder Stand For Mobile Phone Cell Phone\",\"itemId\":\"6462738543254355738373746\",\"itemTitle\":null,\"currPrice\":{\"value\":34,\"currency\":\"USD\"},\"dealsPrice\":null,\"proposePrice\":null,\"stockNum\":null,\"stockReadyDate\":1478569187290,\"currency\":\"USD\",\"state\":null},{\"skuId\":\"a1qO0000001KVV2IAO\",\"skuName\":\"superman_2015 iKross 360掳 Car Air Vent Mount Cradle Holder Stand For Mobile Phone Cell Phone\",\"itemId\":null,\"itemTitle\":null,\"currPrice\":null,\"dealsPrice\":null,\"proposePrice\":null,\"stockNum\":null,\"stockReadyDate\":null,\"currency\":\"USD\",\"state\":null}]", List.class);
 		preHandleData(configs, list);
-//		Object[] values = {"hello world", new Date(), true, 34.8, 8};
-//		LinkedHashMap<String, Object> price = new LinkedHashMap<String, Object>();
-//		price.put("value", 34);
-//		price.put("currency", "USD");
-//		Object[] values = {"hello world", price, price, 1111111111111111l, price, price, price, price};
-		
-//		if (configs.size() > 0) {
-//			int index = 0;
-//			for (ColumnConfiguration config : configs) {
-//				map.put(config.getKey(), values[index++ % 5]);
-//			}
-//		}
-		
-//		list.add(map);
-//		list.add(map);
 		sheetWriter.writeSheet(wb, sheet, configs, list, true);
 		sheetWriter.freeze(sheet, 0, sheetWriter.getFirstDataRowNum());
 		sheetWriter.setProtectionPassword(sheet, "111111");

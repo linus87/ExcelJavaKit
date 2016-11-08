@@ -10,7 +10,7 @@ public class DecimalRangeColumnConstraint extends ColumnConstraint {
 
 	public DecimalRangeColumnConstraint() {
 		super();
-		this.message = "excel.valiation.decimalrange.message";
+		this.message = "excel.validation.decimalrange.message";
 	}
 
 	@Override

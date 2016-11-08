@@ -247,7 +247,7 @@
 			"typeName" : "INTEGER",
 			"picklistEntry" : "",
 			"percision" : 10,
-			"length" : 0,
+			"length" : 100,
 			"digits" : 0
 		},
 		"displayLabel" : [{
@@ -276,7 +276,7 @@
 		"required" : false,
 		"labelName" : "Final Subsidy %",
 		"isUnique" : false,
-		"input" : false,
+		"input" : true,
 		"fieldtype" : {
 			"typeName" : "DATE",
 			"picklistEntry" : "",
@@ -336,5 +336,4 @@
         "labelName": "Account Item Attachment 1",
         "attachmentType": "account_item",
         "input": true
-    }
-]
+    }]

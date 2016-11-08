@@ -327,6 +327,9 @@ public class SheetWriter implements ISheetWriter {
 	
 	/**
 	 * Horizontal align datetime right. Decimal digits are determined by DoubleColumnConstraint.getDigits().
+	 * 
+	 * if value is LinkedHashMap object, it's treated like {value:#.##, currency:'RMB'}. 
+	 * 
 	 * @param book
 	 * @param row
 	 * @param config
@@ -345,7 +348,11 @@ public class SheetWriter implements ISheetWriter {
 		
 		for (ColumnConstraint constraint : config.getConstraints()) {
 			if (constraint instanceof DoubleColumnConstraint) {
-				format = "0." + StringUtil.repeat("0", ((DoubleColumnConstraint) constraint).getDigits());
+				format = "0";
+				if (((DoubleColumnConstraint) constraint).getDigits() > 0) {
+					format += "." + StringUtil.repeat("0", ((DoubleColumnConstraint) constraint).getDigits());
+				}
+				style.setDataFormat(book.createDataFormat().getFormat(format));
 			}
 		}
 		

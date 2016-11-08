@@ -26,6 +26,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
 import org.apache.poi.ss.usermodel.Sheet;
 
+import com.linus.date.DateUtil;
 import com.linus.enums.ICustomEnum;
 import com.linus.excel.util.ExcelUtil;
 import com.linus.excel.validation.ExcelValidator;
@@ -482,7 +483,7 @@ public class SheetReader implements ISheetReader {
 		} else if (Boolean.class.isAssignableFrom(type)) {
 			return "yes".equalsIgnoreCase(text) || "true".equalsIgnoreCase(text);
 		} else if (Date.class.isAssignableFrom(type)) {
-			return cell.getDateCellValue();
+			return DateUtil.resolveDate(text);
 		} else if (Integer.class.isAssignableFrom(type)
 				|| Long.class.isAssignableFrom(type)
 				|| Double.class.isAssignableFrom(type)

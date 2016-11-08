@@ -18,6 +18,7 @@ import com.linus.excel.ColumnConfiguration;
 import com.linus.excel.annotation.Header;
 import com.linus.excel.validation.ColumnConstraint;
 import com.linus.excel.validation.DoubleColumnConstraint;
+import com.linus.excel.validation.FractionColumnConstraint;
 import com.linus.excel.validation.IntegerRangeColumnConstraint;
 import com.linus.excel.validation.LengthColumnConstraint;
 import com.linus.excel.validation.NotNullColumnConstraint;
@@ -153,6 +154,7 @@ public class ExcelUtil {
 		if (typeNode != null && !typeNode.isNull()) {
 			String type = typeNode.get("typeName").asText();
 			config.setRawType(type);
+			config.setType(parseType(type));
 			
 			if (type.equalsIgnoreCase("picklist")) {
 				String entries = typeNode.get("picklistEntry").asText();
@@ -174,8 +176,10 @@ public class ExcelUtil {
 				config.getConstraints().add(constraint);
 			} else if (type.equalsIgnoreCase("double")) {
 				DoubleColumnConstraint constraint = new DoubleColumnConstraint();
-				constraint.setDigits(typeNode.get("digits").asInt(0));
+				FractionColumnConstraint fractionConstraint = new FractionColumnConstraint();
+				fractionConstraint.setPrecision(typeNode.get("digits").asInt(0));
 				config.getConstraints().add(constraint);
+				config.getConstraints().add(fractionConstraint);
 			} else if (type.equalsIgnoreCase("string")) {
 				config.setType(parseType(type));
 				

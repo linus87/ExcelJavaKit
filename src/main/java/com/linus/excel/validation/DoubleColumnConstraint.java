@@ -5,7 +5,7 @@ public class DoubleColumnConstraint extends ColumnConstraint {
 
 	public DoubleColumnConstraint() {
 		super();
-		this.message = "excel.valiation.double.message";
+		this.message = "excel.validation.double.message";
 	}
 
 	@Override
