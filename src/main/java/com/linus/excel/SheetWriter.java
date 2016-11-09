@@ -1,5 +1,6 @@
 package com.linus.excel;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -392,19 +393,25 @@ public class SheetWriter implements ISheetWriter {
 	 * @param value
 	 */
 	private void createDateCell(Workbook book, Row row, ColumnConfiguration config, Object value, CellStyle style) {
-		Cell cell = row.createCell(config.getWriteOrder(), Cell.CELL_TYPE_STRING);
+		Cell cell = row.createCell(config.getWriteOrder(), Cell.CELL_TYPE_NUMERIC);
 		style.setAlignment(CellStyle.ALIGN_CENTER);
 		DataFormat df = book.createDataFormat();
-		style.setDataFormat(df.getFormat("yyyy-mm-dd"));
+		style.setDataFormat(df.getFormat("yyyy-MM-dd"));
 		cell.setCellStyle(style);
 		
-		if (value instanceof Date && value != null) {
-			cell.setCellValue(DateUtil.formatISODate((Date)value, null));
-		} if (value instanceof String && value != null) {
-			cell.setCellValue((String)value);
+		if (value != null) {
+			if (value instanceof Date) {
+				cell.setCellValue(DateUtil.formatISODate((Date)value, null));
+			} if (value instanceof String) {
+				cell.setCellValue((String)value);
+			} else if (value instanceof Number) {
+				Calendar date = Calendar.getInstance();
+				date.setTimeInMillis((long) value);
+				cell.setCellValue(DateUtil.formatISODate(date.getTime(), null));
+			} 
 		} else {
 			cell.setCellType(Cell.CELL_TYPE_BLANK);
-		}		
+		}	
 	}
 	
 	/**
@@ -415,16 +422,20 @@ public class SheetWriter implements ISheetWriter {
 	 * @param value
 	 */
 	private void createDateTimeCell(Workbook book, Row row, ColumnConfiguration config, Object value, CellStyle style) {
-		Cell cell = row.createCell(config.getWriteOrder(), Cell.CELL_TYPE_STRING);
+		Cell cell = row.createCell(config.getWriteOrder(), Cell.CELL_TYPE_NUMERIC);
 		style.setAlignment(CellStyle.ALIGN_CENTER);
 		DataFormat df = book.createDataFormat();
-		style.setDataFormat(df.getFormat("yyyy-mm-dd hh:mm:ss"));
+		style.setDataFormat(df.getFormat("yyyy-MM-dd HH:mm:ss"));
 		cell.setCellStyle(style);
 		
 		if (value instanceof Date && value != null) {
 			cell.setCellValue(DateUtil.formatISODateTime((Date)value, null));
 		} if (value instanceof String && value != null) {
 			cell.setCellValue((String)value);
+		} else if (value instanceof Number) {
+			Calendar date = Calendar.getInstance();
+			date.setTimeInMillis((long) value);
+			cell.setCellValue(DateUtil.formatISODateTime(date.getTime(), null));
 		} else {
 			cell.setCellType(Cell.CELL_TYPE_BLANK);
 		}
@@ -438,10 +449,10 @@ public class SheetWriter implements ISheetWriter {
 	 * @param value
 	 */
 	private void createTimeCell(Workbook book, Row row, ColumnConfiguration config, Object value, CellStyle style) {
-		Cell cell = row.createCell(config.getWriteOrder(), Cell.CELL_TYPE_STRING);
+		Cell cell = row.createCell(config.getWriteOrder(), Cell.CELL_TYPE_NUMERIC);
 		style.setAlignment(CellStyle.ALIGN_CENTER);
 		DataFormat df = book.createDataFormat();
-		style.setDataFormat(df.getFormat("hh:mm:ss"));
+		style.setDataFormat(df.getFormat("HH:mm:ss"));
 		cell.setCellStyle(style);
 		
 		if (value instanceof Date && value != null) {

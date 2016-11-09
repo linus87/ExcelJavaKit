@@ -118,14 +118,13 @@ public class ExcelTest {
 		
 		logger.log(Level.INFO, mapper.writeValueAsString(configs));
 		
-		File file = new File("excel/Listing_Template_203433884.xlsx");
+		File file = new File("excel/template.xlsx");
 		FileInputStream fis = new FileInputStream(file);
 		Workbook wb = new XSSFWorkbook(fis);
 		
 		Sheet sheet = wb.getSheetAt(0);
 		
 		List<Map<String, Object>> list = sheetReader.readSheet(sheet, configs, 3, constraintViolations);	
-		logger.log(Level.INFO, mapper.writeValueAsString(list));
 		
 		if (constraintViolations.size() > 0) {
 			for (ConstraintViolation error : constraintViolations) {

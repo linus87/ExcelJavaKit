@@ -119,7 +119,7 @@ public class SheetReader implements ISheetReader {
 		ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		ExcelValidator validator = new ExcelValidator();
 		
-		for (int i = firstRowNum; i < lastRowNum; i++) {
+		for (int i = firstRowNum; i <= lastRowNum; i++) {
 			logger.log(Level.INFO,	"Beginning to read row " + i);
 			
 			Map<String, Object> obj = readRow(configs, sheet.getRow(i));
@@ -452,7 +452,6 @@ public class SheetReader implements ISheetReader {
 		
 		// CellType of cell which contains date is CELL_TYPE_NUMERIC
 		if (Time.class.isAssignableFrom(type)) {
-			
 			Date date = cell.getDateCellValue();
 			String time = timeformat.format(date);
 			logger.log(Level.INFO, "Time cell value is " + cellVal);
@@ -482,8 +481,10 @@ public class SheetReader implements ISheetReader {
 			return text;
 		} else if (Boolean.class.isAssignableFrom(type)) {
 			return "yes".equalsIgnoreCase(text) || "true".equalsIgnoreCase(text);
+		} else if (Time.class.isAssignableFrom(type)) {
+			return DateUtil.parseTime(text);
 		} else if (Date.class.isAssignableFrom(type)) {
-			return DateUtil.resolveDate(text);
+			return DateUtil.parseDate(text);
 		} else if (Integer.class.isAssignableFrom(type)
 				|| Long.class.isAssignableFrom(type)
 				|| Double.class.isAssignableFrom(type)

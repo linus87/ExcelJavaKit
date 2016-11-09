@@ -206,11 +206,11 @@
 	}, {
 		"sample" : null,
 		"required" : false,
-		"labelName" : "Propose Price_Local Currency",
+		"labelName" : "Begin Time",
 		"isUnique" : false,
-		"input" : false,
+		"input" : true,
 		"fieldtype" : {
-			"typeName" : "DOUBLE",
+			"typeName" : "time",
 			"picklistEntry" : "",
 			"percision" : 10,
 			"length" : 0,
@@ -219,24 +219,58 @@
 		"displayLabel" : [{
 				"locale" : "CN",
 				"localDisplayName" : "中国大陆",
-				"labelName" : "现价",
+				"labelName" : "每天开始时间",
 				"isDefault" : true
 			}, {
 				"locale" : "HK",
 				"localDisplayName" : "香港/台湾",
-				"labelName" : "現價",
+				"labelName" : "每天開始時間",
 				"isDefault" : true
 			}, {
 				"locale" : "TW",
 				"localDisplayName" : "香港/台湾",
-				"labelName" : "現價",
+				"labelName" : "每天開始時間",
 				"isDefault" : true
 			}
 		],
 		"display" : true,
 		"currencyType" : "Local Currency",
 		"attachmentType" : null,
-		"api_Name" : "proposePrice"
+		"api_Name" : "beginTime"
+	}, {
+		"sample" : null,
+		"required" : false,
+		"labelName" : "End Time",
+		"isUnique" : false,
+		"input" : true,
+		"fieldtype" : {
+			"typeName" : "datetime",
+			"picklistEntry" : "",
+			"percision" : 10,
+			"length" : 0,
+			"digits" : 2
+		},
+		"displayLabel" : [{
+				"locale" : "CN",
+				"localDisplayName" : "中国大陆",
+				"labelName" : "每天结束时间",
+				"isDefault" : true
+			}, {
+				"locale" : "HK",
+				"localDisplayName" : "香港/台湾",
+				"labelName" : "每天結束時間",
+				"isDefault" : true
+			}, {
+				"locale" : "TW",
+				"localDisplayName" : "香港/台湾",
+				"labelName" : "每天結束時間",
+				"isDefault" : true
+			}
+		],
+		"display" : true,
+		"currencyType" : "Local Currency",
+		"attachmentType" : null,
+		"api_Name" : "endTime"
 	}, {
 		"sample" : null,
 		"required" : false,

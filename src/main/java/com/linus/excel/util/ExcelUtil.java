@@ -124,7 +124,8 @@ public class ExcelUtil {
 	}
 	
 	/**
-	 * Resolve title attribute from json node which contains column title.
+	 * Get key ("api_Name"), label ("labelName), writable ("input") and sample ("sample") properties values from JsonNode.
+	 * 
 	 * @param titleNode
 	 * @param locale
 	 * @return
@@ -225,6 +226,7 @@ public class ExcelUtil {
 		case "percent"  : return Double.class;
 		case "int"      : return Integer.class;
 		case "date"     : return Date.class;
+		case "datetime" : return Date.class;
 		case "time"     : return Time.class;
 		case "boolean"  : return Boolean.class;
 		case "short"    : return Short.class;
