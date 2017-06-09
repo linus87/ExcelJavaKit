@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -48,15 +47,24 @@ public class ExcelWriterTest {
 		SheetWriter sheetWriter = new SheetWriter();
 		Sheet sheet = wb.createSheet();
 		
-		File configFile = new File(ExcelTest.class.getResource("deals.json").getFile());
+		// read configuration
+		File configFile = new File(ExcelTest.class.getResource("config/configuration.json").getFile());
 		JsonNode tree = mapper.readTree(configFile);
 		ArrayList<ColumnConfiguration> configs = ExcelUtil.getColumnConfigurations((ArrayNode)tree, Locale.CHINA);
 		adjustColumnConfigurations(configs);
 		
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		// read data
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();		
+		File dataFile = new File(ExcelTest.class.getResource("data/data.json").getFile());
+		JsonNode dataJson = mapper.readTree(dataFile);
+		System.out.println(dataJson.toString());
 		
-		list = mapper.readValue("[{\"skuId\":\"a1qO0000001KVV3IAO\",\"skuName\":\"superman_2015 iKross 360掳 Car Air Vent Mount Cradle Holder Stand For Mobile Phone Cell Phone\",\"itemId\":\"6462738543254355738373746\",\"itemTitle\":null,\"currPrice\":{\"value\":34,\"currency\":\"USD\"},\"dealsPrice\":null,\"beginTime\":\"12:12:12\",\"endTime\":1478594588005,\"stockNum\":null,\"stockReadyDate\":1462579200000,\"currency\":\"USD\",\"state\":null},{\"skuId\":\"a1qO0000001KVV2IAO\",\"skuName\":\"superman_2015 iKross 360掳 Car Air Vent Mount Cradle Holder Stand For Mobile Phone Cell Phone\",\"itemId\":null,\"itemTitle\":null,\"currPrice\":null,\"dealsPrice\":null,\"proposePrice\":null,\"stockNum\":null,\"stockReadyDate\":1478594588005,\"currency\":\"USD\",\"state\":null, \"endTime\":1478594588005}]", List.class);
+		list = mapper.readValue(dataJson.toString(), List.class);
+		
+		// adjust configuration
 		preHandleData(configs, list);
+		
+		// write to excel
 		sheetWriter.writeSheet(wb, sheet, configs, list, true);
 		sheetWriter.freeze(sheet, 0, sheetWriter.getFirstDataRowNum());
 		sheetWriter.setProtectionPassword(sheet, "111111");

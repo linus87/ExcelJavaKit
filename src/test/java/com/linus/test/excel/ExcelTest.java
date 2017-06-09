@@ -43,7 +43,6 @@ public class ExcelTest {
 	
 //	@Test
 	public void testReaderRowAsList() throws IOException {
-		Set<ConstraintViolation<Object>> constraintViolations = new HashSet<ConstraintViolation<Object>>();
 		ISheetReader sheetReader = new SheetReader();
 		
 		File file = new File("excel/template.xlsx");
@@ -88,7 +87,7 @@ public class ExcelTest {
 		logger.log(Level.INFO, mapper.writeValueAsString(list));
 		
 		if (constraintViolations.size() > 0) {
-			for (ConstraintViolation error : constraintViolations) {
+			for (ConstraintViolation<Object> error : constraintViolations) {
 				logger.log(Level.INFO, error.getMessage() + error.getInvalidValue());
 			}
 		}
@@ -127,7 +126,7 @@ public class ExcelTest {
 		List<Map<String, Object>> list = sheetReader.readSheet(sheet, configs, 3, constraintViolations);	
 		
 		if (constraintViolations.size() > 0) {
-			for (ConstraintViolation error : constraintViolations) {
+			for (ConstraintViolation<Object> error : constraintViolations) {
 				logger.log(Level.INFO, error.getMessage() + error.getInvalidValue());
 			}
 		}

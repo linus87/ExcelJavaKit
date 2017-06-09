@@ -307,7 +307,7 @@
 		"api_Name" : "stockNum"
 	}, {
 		"sample" : null,
-		"required" : false,
+		"required" : true,
 		"labelName" : "Final Subsidy %",
 		"isUnique" : false,
 		"input" : true,
@@ -346,6 +346,7 @@
         "isUnique": false,
         "currencyType": null,
         "display": false,
+        "length": 20,
         "displayLabel": [
             {
                 "isDefault": true,
