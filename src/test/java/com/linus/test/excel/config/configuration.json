@@ -38,6 +38,7 @@
 		"labelName" : "Stock ready Time",
 		"isUnique" : true,
 		"input" : false,
+		"length": 20,
 		"fieldtype" : {
 			"typeName" : "STRING",
 			"picklistEntry" : "",

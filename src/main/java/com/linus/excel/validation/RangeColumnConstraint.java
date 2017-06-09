@@ -12,6 +12,7 @@ public class RangeColumnConstraint extends ColumnConstraint {
 	private static ObjectMapper mapper = new ObjectMapper();
 	private String[]  pickList;
 	private Boolean mustInRange = true;
+	private boolean allowMultiple = false;
 
 	public RangeColumnConstraint() {
 		super();
@@ -24,13 +25,42 @@ public class RangeColumnConstraint extends ColumnConstraint {
 			return true; 
 		}
 		
-		for (String entry : pickList) {
-			if (equal(entry, value)) {
-				return true;
+		if (allowMultiple) {
+			String text = value.toString();
+			String[] values = (text).split(",");
+			boolean inRange = true;
+			for (String v : values) {
+				boolean found = false;
+				for (String entry : pickList) {
+					if (equal(entry, v)) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					inRange = false;
+					break;
+				}
 			}
+			
+			return inRange;
+		} else {
+    		for (String entry : pickList) {
+    			if (equal(entry, value)) {
+    				return true;
+    			}
+    		}
 		}
 		
 		return false;
+	}
+	
+	public boolean isAllowMultiple() {
+		return allowMultiple;
+	}
+
+	public void setAllowMultiple(boolean allowMultiple) {
+		this.allowMultiple = allowMultiple;
 	}
 	
 	public String resolveMessage(String message) {
