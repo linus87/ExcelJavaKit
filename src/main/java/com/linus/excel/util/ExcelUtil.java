@@ -63,7 +63,7 @@ public class ExcelUtil {
 				if (h != null) {
 					ColumnConfiguration config = new ColumnConfiguration();
 					config.setTitle(h.title());
-					config.setColumnIndex(h.readOrder());
+					config.setColumnIndex(h.columnIndex());
 					config.setWritable(h.writable());
 					config.setPropertyDescriptor(descriptor);
 					configs.add(config);
