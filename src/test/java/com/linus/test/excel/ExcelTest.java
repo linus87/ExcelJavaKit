@@ -146,7 +146,7 @@ public class ExcelTest {
 	
 //	@Test
 	public void testReader() throws IOException {
-		Set<ConstraintViolation<Object>> constraintViolations = new HashSet<ConstraintViolation<Object>>();
+		Set<ConstraintViolation<User>> constraintViolations = new HashSet<ConstraintViolation<User>>();
 		// preparing validation
 //		ValidatorFactory factory = Validation.byDefaultProvider().configure().messageInterpolator(new ResourceBundleMessageInterpolator(new PlatformResourceBundleLocator("ExcelValidationMessages"))).buildValidatorFactory();
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -160,22 +160,22 @@ public class ExcelTest {
 		Workbook wb = new XSSFWorkbook(fis);
 		
 		Sheet sheet = wb.getSheetAt(0);
-		List<Object> users = sheetReader.readSheet(sheet, User.class, 1, constraintViolations);
+		List<User> users = sheetReader.readSheet(sheet, User.class, 1, constraintViolations);
 		
 		Assert.assertNotNull(constraintViolations);
 		
 		if (constraintViolations != null) {
 			System.out.println(constraintViolations.size());
-			Iterator<ConstraintViolation<Object>> violationIter = constraintViolations.iterator();
+			Iterator<ConstraintViolation<User>> violationIter = constraintViolations.iterator();
 			while(violationIter.hasNext()) {
-				ConstraintViolation<Object> error = violationIter.next();
+				ConstraintViolation<User> error = violationIter.next();
 				logger.log(Level.INFO, "Error message: " + error.getMessage());
 				logger.log(Level.INFO, "Invalid: " + error.getInvalidValue());
 			}
 		}		
 		
 		if (users != null && !users.isEmpty()) {
-			Iterator<Object> iter = users.iterator();
+			Iterator<User> iter = users.iterator();
 			while (iter.hasNext()) {
 				User user = (User)iter.next();
 				logger.log(Level.INFO, mapper.writeValueAsString(user));
