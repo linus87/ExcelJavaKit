@@ -4,6 +4,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import com.linus.excel.po.User;
+import com.linus.excel.po.UserChecker;
 
 public class UserValidator implements ConstraintValidator<UserChecker, User> {
 

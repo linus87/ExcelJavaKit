@@ -190,10 +190,10 @@ public class SheetReader implements ISheetReader {
 
 	
 	@Override
-	public List<Object> readSheet(Sheet sheet, Class<?> clazz, int firstDataRow, Set<ConstraintViolation<Object>> constraintViolations) {
+	public <T> List<T> readSheet(Sheet sheet, Class<T> clazz, int firstDataRow, Set<ConstraintViolation<T>> constraintViolations) {
 				
 		ArrayList<ColumnConfiguration> headers = null;
-		ArrayList<Object> list = new ArrayList<Object>();
+		ArrayList<T> list = new ArrayList<T>();
 
 		if (sheetHeaders.containsKey(clazz)) {
 			 headers = sheetHeaders.get(clazz);
@@ -216,10 +216,10 @@ public class SheetReader implements ISheetReader {
 				Row row = sheet.getRow(i);
 				
 				if (row != null) {
-					Object obj = readRow(headers, row, clazz);
+					T obj = readRow(headers, row, clazz);
 					if (obj != null) {
 						if (validator != null) {
-							Set<ConstraintViolation<Object>> violations = validator.validate(obj);
+							Set<ConstraintViolation<T>> violations = validator.validate(obj);
 							
 							if (violations == null || violations.isEmpty()) {
 								list.add(obj);
@@ -310,10 +310,10 @@ public class SheetReader implements ISheetReader {
 	/**
 	 * Read a single row and convert it into specified type instance. All cell values will be instance properties. 
 	 */
-	public Object readRow(List<ColumnConfiguration> headers, Row row,
-			Class<?> clazz) {
+	public <T> T readRow(List<ColumnConfiguration> headers, Row row,
+			Class<T> clazz) {
 		
-		Object o = null;
+		T o = null;
 
 		if (headers != null && !headers.isEmpty()) {
 			try {

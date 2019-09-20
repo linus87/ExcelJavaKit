@@ -168,7 +168,7 @@ public interface ISheetReader {
 	 * @param clazz
 	 * @return
 	 */
-	public Object readRow(List<ColumnConfiguration> headers, Row row, Class<?> clazz);
+	public <T> T readRow(List<ColumnConfiguration> headers, Row row, Class<T> clazz);
 	
 	/**
 	 * If a row is not valid, read operation will stop and argument violations will be filled with ConstraintViolations.
@@ -183,7 +183,7 @@ public interface ISheetReader {
 	 * @param violations
 	 * @return
 	 */
-	public List<Object> readSheet(Sheet sheet, Class<?> clazz, int firstDataRow, Set<ConstraintViolation<Object>> violations);
+	public <T> List<T> readSheet(Sheet sheet, Class<T> clazz, int firstDataRow, Set<ConstraintViolation<T>> violations);
 		
 	public void setValidator(Validator validator);
 }

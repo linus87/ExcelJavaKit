@@ -12,7 +12,6 @@ import org.hibernate.validator.constraints.Email;
 
 import com.linus.excel.annotation.Header;
 import com.linus.excel.enums.Gender;
-import com.linus.excel.validation.UserChecker;
 
 @UserChecker
 public class User {

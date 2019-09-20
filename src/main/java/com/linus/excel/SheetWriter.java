@@ -25,11 +25,11 @@ import org.apache.poi.xssf.usermodel.XSSFDataValidationHelper;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 import com.linus.date.DateUtil;
+import com.linus.excel.util.StringUtil;
 import com.linus.excel.validation.ColumnConstraint;
 import com.linus.excel.validation.DoubleColumnConstraint;
 import com.linus.excel.validation.IntegerRangeColumnConstraint;
 import com.linus.excel.validation.RangeColumnConstraint;
-import com.linus.primitive.StringUtil;
 
 /**
  * 
