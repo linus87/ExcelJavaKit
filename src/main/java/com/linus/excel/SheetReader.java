@@ -289,7 +289,7 @@ public class SheetReader implements ISheetReader {
 			ColumnConfiguration header = iter.next();
 			
 			// if cell doesn't exist, return null;
-			Cell cell = row.getCell(header.getReadOrder(), MissingCellPolicy.CREATE_NULL_AS_BLANK);
+			Cell cell = row.getCell(header.getColumnIndex(), MissingCellPolicy.CREATE_NULL_AS_BLANK);
 			Object value = null;
 			
 			if (header.getType() != null) {
@@ -335,7 +335,7 @@ public class SheetReader implements ISheetReader {
 			while (iter.hasNext()) {
 				header = iter.next();
 				
-				Cell cell = row.getCell(header.getReadOrder(), MissingCellPolicy.RETURN_NULL_AND_BLANK);
+				Cell cell = row.getCell(header.getColumnIndex(), MissingCellPolicy.RETURN_NULL_AND_BLANK);
 				Method setter = header.getPropertyDescriptor().getWriteMethod();
 				Object value = readCell(cell, header.getPropertyDescriptor()
 						.getReadMethod().getReturnType());

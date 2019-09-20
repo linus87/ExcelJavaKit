@@ -129,13 +129,13 @@ public class SheetWriter implements ISheetWriter {
 	public void writeRow(Workbook book, Sheet sheet, Row row, List<ColumnConfiguration> configs, Map<String, Object> map) {
 		for (ColumnConfiguration config : configs) {
 			if (config != null) {
-				CellStyle cellStyle = styleMapping.get(config.getWriteOrder());
+				CellStyle cellStyle = styleMapping.get(config.getColumnIndex());
 				if (cellStyle == null) {
 					cellStyle = book.createCellStyle();
 					cellStyle.setLocked(!config.getWritable());
 					cellStyle.setFont(defaultFont);
 					cellStyle.setWrapText(true);
-					styleMapping.put(config.getWriteOrder(), cellStyle);
+					styleMapping.put(config.getColumnIndex(), cellStyle);
 				}
 				createCell(book, sheet, row, config, map.get(config.getKey()), cellStyle);
 			}
@@ -157,7 +157,7 @@ public class SheetWriter implements ISheetWriter {
 
 		for (ColumnConfiguration config : configs) {
 			if (!config.getDisplay()) {
-				hideColumn(sheet, config.getWriteOrder());
+				hideColumn(sheet, config.getColumnIndex());
 			}
 		}
 
@@ -177,7 +177,7 @@ public class SheetWriter implements ISheetWriter {
 					XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint)
 					    dvHelper.createExplicitListConstraint(((RangeColumnConstraint) constraint).getPickList());
 
-					CellRangeAddressList addressList = new CellRangeAddressList(firstDataRowNum,  sheet.getLastRowNum(), config.getWriteOrder(), config.getWriteOrder());
+					CellRangeAddressList addressList = new CellRangeAddressList(firstDataRowNum,  sheet.getLastRowNum(), config.getColumnIndex(), config.getColumnIndex());
 					XSSFDataValidation validation =(XSSFDataValidation)dvHelper.createValidation(dvConstraint, addressList);
 
 					// Display pick list when user click the cell.
@@ -202,7 +202,7 @@ public class SheetWriter implements ISheetWriter {
 											+ iconstraint.getMax());
 
 					CellRangeAddressList addressList = new CellRangeAddressList(firstDataRowNum, sheet.getLastRowNum(),
-							config.getWriteOrder(), config.getWriteOrder());
+							config.getColumnIndex(), config.getColumnIndex());
 					XSSFDataValidation validation = (XSSFDataValidation) dvHelper.createValidation(dvConstraint,
 							addressList);
 
@@ -251,7 +251,7 @@ public class SheetWriter implements ISheetWriter {
 
 		for (ColumnConfiguration config : configs) {
 			if (config != null) {
-				createCell(book, sheet, row, config.getWriteOrder(), config.getTitle(), headerStyle);
+				createCell(book, sheet, row, config.getColumnIndex(), config.getTitle(), headerStyle);
 			}
 		}
 
@@ -269,7 +269,7 @@ public class SheetWriter implements ISheetWriter {
 
 		for (ColumnConfiguration config : configs) {
 			if (config != null) {
-				createCell(book, sheet, row, config.getWriteOrder(), config.getLabel(), headerStyle);
+				createCell(book, sheet, row, config.getColumnIndex(), config.getLabel(), headerStyle);
 			}
 		}
 	}
@@ -318,7 +318,7 @@ public class SheetWriter implements ISheetWriter {
 	 * @param value
 	 */
 	private void createCell(Workbook book, Row row, ColumnConfiguration config, Object value, CellStyle style) {
-		Cell cell = row.createCell(config.getWriteOrder(), Cell.CELL_TYPE_STRING);
+		Cell cell = row.createCell(config.getColumnIndex(), Cell.CELL_TYPE_STRING);
 		if (value != null) {
 			cell.setCellValue(value.toString());
 		} else {
@@ -338,7 +338,7 @@ public class SheetWriter implements ISheetWriter {
 	 * @param value
 	 */
 	private void createPercentCell(Workbook book, Row row, ColumnConfiguration config, Object value, CellStyle style) {
-		Cell cell = row.createCell(config.getWriteOrder(), Cell.CELL_TYPE_NUMERIC);
+		Cell cell = row.createCell(config.getColumnIndex(), Cell.CELL_TYPE_NUMERIC);
 		style.setAlignment(CellStyle.ALIGN_CENTER);
 		DataFormat df = book.createDataFormat();
 		style.setDataFormat(df.getFormat("0.00%"));
@@ -364,7 +364,7 @@ public class SheetWriter implements ISheetWriter {
 	 * @param value
 	 */
 	private void createDoubleCell(Workbook book, Row row, ColumnConfiguration config, Object value, CellStyle style) {
-		Cell cell = row.createCell(config.getWriteOrder(), Cell.CELL_TYPE_NUMERIC);
+		Cell cell = row.createCell(config.getColumnIndex(), Cell.CELL_TYPE_NUMERIC);
 		style.setAlignment(CellStyle.ALIGN_RIGHT);
 
 		String currency = null;
@@ -423,7 +423,7 @@ public class SheetWriter implements ISheetWriter {
 	 * @param value
 	 */
 	private void createDateCell(Workbook book, Row row, ColumnConfiguration config, Object value, CellStyle style) {
-		Cell cell = row.createCell(config.getWriteOrder(), Cell.CELL_TYPE_NUMERIC);
+		Cell cell = row.createCell(config.getColumnIndex(), Cell.CELL_TYPE_NUMERIC);
 		style.setAlignment(CellStyle.ALIGN_CENTER);
 		DataFormat df = book.createDataFormat();
 		style.setDataFormat(df.getFormat("yyyy-MM-dd"));
@@ -454,7 +454,7 @@ public class SheetWriter implements ISheetWriter {
 	 * @param value
 	 */
 	private void createDateTimeCell(Workbook book, Row row, ColumnConfiguration config, Object value, CellStyle style) {
-		Cell cell = row.createCell(config.getWriteOrder(), Cell.CELL_TYPE_NUMERIC);
+		Cell cell = row.createCell(config.getColumnIndex(), Cell.CELL_TYPE_NUMERIC);
 		style.setAlignment(CellStyle.ALIGN_CENTER);
 		DataFormat df = book.createDataFormat();
 		style.setDataFormat(df.getFormat("yyyy-MM-dd HH:mm:ss"));
@@ -482,7 +482,7 @@ public class SheetWriter implements ISheetWriter {
 	 * @param value
 	 */
 	private void createTimeCell(Workbook book, Row row, ColumnConfiguration config, Object value, CellStyle style) {
-		Cell cell = row.createCell(config.getWriteOrder(), Cell.CELL_TYPE_NUMERIC);
+		Cell cell = row.createCell(config.getColumnIndex(), Cell.CELL_TYPE_NUMERIC);
 		style.setAlignment(CellStyle.ALIGN_CENTER);
 		DataFormat df = book.createDataFormat();
 		style.setDataFormat(df.getFormat("HH:mm:ss"));
@@ -547,9 +547,9 @@ public class SheetWriter implements ISheetWriter {
 			if (config.getLength() != null) {
 				// character length + 2, 256 is a character's width;
 				int columnWidth = 512 * (config.getLength() + 2);
-				sheet.setColumnWidth(config.getWriteOrder(), columnWidth);
+				sheet.setColumnWidth(config.getColumnIndex(), columnWidth);
 			} else {
-				sheet.autoSizeColumn(config.getWriteOrder());
+				sheet.autoSizeColumn(config.getColumnIndex());
 			}
 
 		}

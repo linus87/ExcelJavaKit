@@ -63,8 +63,7 @@ public class ExcelUtil {
 				if (h != null) {
 					ColumnConfiguration config = new ColumnConfiguration();
 					config.setTitle(h.title());
-					config.setReadOrder(h.readOrder());
-					config.setWriteOrder(h.writeOrder());
+					config.setColumnIndex(h.readOrder());
 					config.setWritable(h.writable());
 					config.setPropertyDescriptor(descriptor);
 					configs.add(config);
@@ -93,8 +92,7 @@ public class ExcelUtil {
 			if (json != null) {
 				ColumnConfiguration config = new ColumnConfiguration();
 				config.setTitle(getTitle(json.get("displayLabel"), locale));
-				config.setReadOrder(i);
-				config.setWriteOrder(i);
+				config.setColumnIndex(i);
 				resolveCommonConfigurations(config, json);
 				resolveColumnConstraint(config, json);
 				configs.add(config);
