@@ -23,4 +23,6 @@ public @interface Header {
 	 * @return
 	 */
 	boolean modifiable() default true;
+	
+	String rawType() default "STRING";
 }

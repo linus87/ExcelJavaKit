@@ -56,6 +56,7 @@ public class ExcelUtil {
 					config.setKey(descriptor.getName());
 					config.setColumnIndex(h.columnIndex());
 					config.setWritable(h.writable());
+					config.setRawType(h.rawType());
 					config.setPropertyDescriptor(descriptor);
 					configs.add(config);
 				}

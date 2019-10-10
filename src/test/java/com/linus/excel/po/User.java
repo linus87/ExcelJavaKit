@@ -98,7 +98,7 @@ public class User {
 		this.birthday = birthday;
 	}
 
-	@Header(columnIndex=10)
+	@Header(columnIndex=10, rawType="TIME")
 	public Time getTime() {
 		return time;
 	}
@@ -116,7 +116,7 @@ public class User {
 		this.completed = completed;
 	}
 
-	@Header(columnIndex=12)
+	@Header(columnIndex=12, rawType="DATETIME")
 	public Calendar getEnd() {
 		return end;
 	}
