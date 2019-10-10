@@ -9,6 +9,8 @@ import java.sql.Date;
 import java.sql.Time;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 import com.linus.excel.ColumnConfiguration;
@@ -36,7 +38,7 @@ public class ExcelUtil {
 	 * @return A list of column configuration on properties.
 	 * @throws IntrospectionException
 	 */
-	public static ArrayList<ColumnConfiguration> getColumnConfigurations(Class<?> clazz) throws IntrospectionException {
+	public static ArrayList<ColumnConfiguration> getColumnConfigurations(Class<?> clazz, Locale locale, ResourceBundle bundle) throws IntrospectionException {
 
 		BeanInfo info = Introspector.getBeanInfo(clazz);
 		PropertyDescriptor[] descriptors = info.getPropertyDescriptors();
@@ -50,7 +52,7 @@ public class ExcelUtil {
 				Header h = descriptor.getReadMethod().getAnnotation(Header.class);
 				if (h != null) {
 					ColumnConfiguration config = new ColumnConfiguration();
-					config.setTitle(h.title());
+					config.setTitle(bundle.getString(h.title()));
 					config.setColumnIndex(h.columnIndex());
 					config.setWritable(h.writable());
 					config.setPropertyDescriptor(descriptor);
