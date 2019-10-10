@@ -10,18 +10,13 @@ import java.lang.annotation.Target;
 public @interface Header {
 	String title() default "header.default";
 	
-	/**
-	 * Which column does this property get value from excel.
-	 * @return
-	 */
-	int readOrder() default 0;
+	int columnIndex() default 0;
 	
 	/**
 	 * If this property may be written into excel in the future, set it as true.
 	 * @return
 	 */
-	boolean writable() default true;	
-	int writeOrder() default 0;
+	boolean writable() default true;
 	
 	/**
 	 * if user can't modify this cell in excel, set it as false.

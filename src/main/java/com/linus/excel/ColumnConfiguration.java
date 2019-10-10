@@ -13,6 +13,11 @@ import com.linus.excel.validation.ColumnConstraint;
 public class ColumnConfiguration {
 	
 	/**
+	 *  for JSON and XML conversion
+	 */
+	private String key;
+	
+	/**
 	 * Excel column header title. In fact, it's local label.
 	 */
 	private String title;
@@ -24,20 +29,12 @@ public class ColumnConfiguration {
 	 */
 	private Integer length;
 	
-	/**
-	 * Which excel column to read data.
-	 */
-	private int readOrder;
-	
-	/**
-	 * Which excel row to read data.
-	 */
-	private int writeOrder;
+	private int columnIndex;
 	
 	/**
 	 * Whether user can change the default value in the cell.
 	 */
-	private Boolean writable;
+	private boolean writable;
 	
 	/**
 	 * The PropertyDescriptor object of the property which the cell maps to.
@@ -48,10 +45,9 @@ public class ColumnConfiguration {
 	
 	private Class<?> type;
 	
-	// for JSON and XML conversion
-	private String key;
-	
-	// sample data
+	/**
+	 * sample data
+	 */
 	private String sample;
 	
 	private List<ColumnConstraint> constraints = new ArrayList<ColumnConstraint>();
@@ -87,18 +83,6 @@ public class ColumnConfiguration {
 		this.propertyDescriptor = propertyDescriptor;
 	}
 
-	public int getReadOrder() {
-		return readOrder;
-	}
-	public void setReadOrder(int readOrder) {
-		this.readOrder = readOrder;
-	}
-	public int getWriteOrder() {
-		return writeOrder;
-	}
-	public void setWriteOrder(int writeOrder) {
-		this.writeOrder = writeOrder;
-	}
 
 	public String getRawType() {
 		return rawType;
@@ -144,6 +128,12 @@ public class ColumnConfiguration {
 	}
 	public void setLabel(String label) {
 		this.label = label;
+	}
+	public int getColumnIndex() {
+		return columnIndex;
+	}
+	public void setColumnIndex(int columnIndex) {
+		this.columnIndex = columnIndex;
 	}
 
 }

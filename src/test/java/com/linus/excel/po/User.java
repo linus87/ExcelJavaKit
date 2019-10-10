@@ -12,7 +12,6 @@ import org.hibernate.validator.constraints.Email;
 
 import com.linus.excel.annotation.Header;
 import com.linus.excel.enums.Gender;
-import com.linus.excel.validation.UserChecker;
 
 @UserChecker
 public class User {
@@ -33,28 +32,28 @@ public class User {
 	
 	@NotNull
 	@Size(max=64)
-	@Header(readOrder=0, writeOrder = 0)
+	@Header(columnIndex=0)
 	public String getFirstName() {
 		return firstName;
 	}
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
-	@Header(readOrder=1, writeOrder = 1)
+	@Header(columnIndex=1)
 	public String getLastName() {
 		return lastName;
 	}
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	@Header(readOrder=2, writeOrder = 2)
+	@Header(columnIndex=2)
 	public Integer getAge() {
 		return age;
 	}
 	public void setAge(Integer age) {
 		this.age = age;
 	}
-	@Header(readOrder=3, writeOrder = 3)
+	@Header(columnIndex=3)
 	public Gender getGender() {
 		return gender;
 	}
@@ -63,7 +62,7 @@ public class User {
 	}
 	
 	@Email
-	@Header(readOrder=4, writeOrder = 4)
+	@Header(columnIndex=4)
 	public String getEmail() {
 		return email;
 	}
@@ -71,7 +70,7 @@ public class User {
 		this.email = email;
 	}
 	
-	@Header(readOrder=5, writeOrder = 5)
+	@Header(columnIndex=5)
 	public Double getShippingFee() {
 		return shippingFee;
 	}
@@ -82,7 +81,7 @@ public class User {
 
 	@NotNull
 	@Pattern(regexp="yes|no|free", flags={Pattern.Flag.CASE_INSENSITIVE}, message="{validation.excel.user.free.message}")
-	@Header(readOrder=6, writeOrder = 6)
+	@Header(columnIndex=6)
 	public String getFree() {
 		return free;
 	}
@@ -90,7 +89,7 @@ public class User {
 		this.free = free;
 	}
 
-	@Header(readOrder=8, writeOrder = 8)
+	@Header(columnIndex=8)
 	public Date getBirthday() {
 		return birthday;
 	}
@@ -99,7 +98,7 @@ public class User {
 		this.birthday = birthday;
 	}
 
-	@Header(readOrder=10, writeOrder = 10)
+	@Header(columnIndex=10)
 	public Time getTime() {
 		return time;
 	}
@@ -108,7 +107,7 @@ public class User {
 		this.time = time;
 	}
 
-	@Header(readOrder=11, writeOrder = 11)
+	@Header(columnIndex=11)
 	public double getCompleted() {
 		return completed;
 	}
@@ -117,7 +116,7 @@ public class User {
 		this.completed = completed;
 	}
 
-	@Header(readOrder=12, writeOrder = 12)
+	@Header(columnIndex=12)
 	public Calendar getEnd() {
 		return end;
 	}
@@ -126,7 +125,7 @@ public class User {
 		this.end = end;
 	}
 
-	@Header(readOrder=7, writeOrder = 7)
+	@Header(columnIndex=7)
 	public Boolean getStudent() {
 		return student;
 	}

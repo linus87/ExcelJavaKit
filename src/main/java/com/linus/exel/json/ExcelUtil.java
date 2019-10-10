@@ -1,4 +1,4 @@
-package com.linus.excel.util;
+package com.linus.exel.json;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -39,41 +39,6 @@ public class ExcelUtil {
 		System.out.println(formatNumber(num));
 	}
 
-	/**
-	 * Get column configurations for POJO properties. These configurations are stored in <code>Header</code> annotation.
-	 * 
-	 * @see Header
-	 * 
-	 * @param clazz Class
-	 * @return A list of column configuration on properties.
-	 * @throws IntrospectionException
-	 */
-	public static ArrayList<ColumnConfiguration> getColumnConfigurations(Class<?> clazz) throws IntrospectionException {
-
-		BeanInfo info = Introspector.getBeanInfo(clazz);
-		PropertyDescriptor[] descriptors = info.getPropertyDescriptors();
-		ArrayList<ColumnConfiguration> configs = new ArrayList<ColumnConfiguration>();
-
-		for (int i = 0; i < descriptors.length; i++) {
-			PropertyDescriptor descriptor = descriptors[i];
-			Method getter = descriptor.getReadMethod();
-			// "Boolean" type property doesn't support "is" getter. Only "boolean" supports. 
-			if (getter != null) {
-				Header h = descriptor.getReadMethod().getAnnotation(Header.class);
-				if (h != null) {
-					ColumnConfiguration config = new ColumnConfiguration();
-					config.setTitle(h.title());
-					config.setColumnIndex(h.columnIndex());
-					config.setWritable(h.writable());
-					config.setPropertyDescriptor(descriptor);
-					configs.add(config);
-				}
-			}
-		}
-
-		return configs;
-	}
-	
 	/**
 	 * Get column configurations form JSON array. Each element in array is a column's configuration. 
 	 * But we need to convert them into ColumnConfiguration objects.
