@@ -223,7 +223,7 @@ public class SheetWriter implements ISheetWriter {
 
 		adjustColumnWidth(sheet, configs);
 	}
-
+	
 	@Override
 	public void writeSheet2(Workbook book, Sheet sheet, List<ColumnConfiguration> configs, List<List<Object>> list,
 			boolean hasTitle) {

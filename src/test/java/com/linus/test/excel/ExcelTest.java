@@ -14,11 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-
-import junit.framework.Assert;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -31,10 +26,11 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.linus.excel.ColumnConfiguration;
 import com.linus.excel.ISheetReader;
 import com.linus.excel.SheetReader;
-import com.linus.excel.po.User;
 import com.linus.excel.util.ExcelUtil;
 import com.linus.excel.validation.ColumnConstraint;
 import com.linus.excel.validation.NotNullColumnConstraint;
+
+import junit.framework.Assert;
 
 public class ExcelTest {
 	private final Logger logger = Logger.getLogger(ExcelTest.class.getName());
@@ -143,50 +139,6 @@ public class ExcelTest {
 		fis.close();
 		wb.close();
 	}
-	
-//	@Test
-	public void testReader() throws IOException {
-		Set<ConstraintViolation<User>> constraintViolations = new HashSet<ConstraintViolation<User>>();
-		// preparing validation
-//		ValidatorFactory factory = Validation.byDefaultProvider().configure().messageInterpolator(new ResourceBundleMessageInterpolator(new PlatformResourceBundleLocator("ExcelValidationMessages"))).buildValidatorFactory();
-		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-		Validator validator = factory.getValidator();
-		
-		ISheetReader sheetReader = new SheetReader();
-		sheetReader.setValidator(validator);
-		
-		File file = new File("excel/sheetreader.xlsx");
-		FileInputStream fis = new FileInputStream(file);
-		Workbook wb = new XSSFWorkbook(fis);
-		
-		Sheet sheet = wb.getSheetAt(0);
-		List<User> users = sheetReader.readSheet(sheet, User.class, 1, constraintViolations);
-		
-		Assert.assertNotNull(constraintViolations);
-		
-		if (constraintViolations != null) {
-			System.out.println(constraintViolations.size());
-			Iterator<ConstraintViolation<User>> violationIter = constraintViolations.iterator();
-			while(violationIter.hasNext()) {
-				ConstraintViolation<User> error = violationIter.next();
-				logger.log(Level.INFO, "Error message: " + error.getMessage());
-				logger.log(Level.INFO, "Invalid: " + error.getInvalidValue());
-			}
-		}		
-		
-		if (users != null && !users.isEmpty()) {
-			Iterator<User> iter = users.iterator();
-			while (iter.hasNext()) {
-				User user = (User)iter.next();
-				logger.log(Level.INFO, mapper.writeValueAsString(user));
-			}
-		}
-		
-		Assert.assertTrue(users.size() > 0);
-		fis.close();
-		wb.close();
-	}
-	
 	
 	/**
 	 * Listing fields of promotion doesn't contain nomination id. But we need nomination id to differentiate listings. So we have to 
