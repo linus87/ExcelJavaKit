@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.linus.excel.ColumnConfiguration;
-import com.linus.excel.SheetWriter;
+import com.linus.excel.MapSheetWriter;
 import com.linus.excel.util.ExcelUtil;
 import com.linus.excel.validation.ColumnConstraint;
 import com.linus.excel.validation.NotNullColumnConstraint;
@@ -45,7 +45,7 @@ public class ExcelWriterTest {
 		FileOutputStream fos = new FileOutputStream(file);
 		Workbook wb = new XSSFWorkbook();
 
-		SheetWriter sheetWriter = new SheetWriter();
+		MapSheetWriter sheetWriter = new MapSheetWriter();
 		Sheet sheet = wb.createSheet();
 
 		// read configuration

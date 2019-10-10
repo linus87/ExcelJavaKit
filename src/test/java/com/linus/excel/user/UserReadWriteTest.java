@@ -35,8 +35,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linus.excel.ColumnConfiguration;
 import com.linus.excel.ISheetReader;
 import com.linus.excel.ISheetWriter;
+import com.linus.excel.MapSheetWriter;
 import com.linus.excel.SheetReader;
-import com.linus.excel.SheetWriter;
 import com.linus.excel.enums.Gender;
 import com.linus.excel.po.User;
 import com.linus.excel.po.util.ExcelUtil;
@@ -98,7 +98,7 @@ public class UserReadWriteTest {
 	
 	@Test
 	public void testWriter() throws IOException, IntrospectionException {
-		ISheetWriter sheetWriter = new SheetWriter();
+		ISheetWriter<Map<String, Object>> sheetWriter = new MapSheetWriter();
 		
 		Workbook wb = new XSSFWorkbook();
 		

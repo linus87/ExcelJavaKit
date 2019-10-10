@@ -89,7 +89,7 @@ public class User {
 		this.free = free;
 	}
 
-	@Header(columnIndex=8)
+	@Header(columnIndex=8, rawType="DATE")
 	public Date getBirthday() {
 		return birthday;
 	}
@@ -107,7 +107,7 @@ public class User {
 		this.time = time;
 	}
 
-	@Header(columnIndex=11)
+	@Header(columnIndex=11, rawType="PERCENT")
 	public double getCompleted() {
 		return completed;
 	}

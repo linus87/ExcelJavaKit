@@ -1,7 +1,6 @@
 package com.linus.excel;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -14,7 +13,7 @@ import org.apache.poi.ss.usermodel.Workbook;
  * 
  * @author lyan2
  */
-public interface ISheetWriter {
+public interface ISheetWriter<T> {
 	
 	/**
 	 * Create a new cell in row and set cell type according to value type.
@@ -38,15 +37,6 @@ public interface ISheetWriter {
 	public void createCell(Workbook book, Sheet sheet, Row row, ColumnConfiguration config, Object value, CellStyle style);
 
 	/**
-	 * Fill row with a map's values. Display order is the same as it is in list.
-	 * @param book
-	 * @param sheet
-	 * @param row
-	 * @param list
-	 */
-	public void writeRow(Workbook book, Sheet sheet, Row row, List<Object> list);
-	
-	/**
 	 * Fill row with a map's values. Display order is determined by config.getKey() and config.getWriteOrder().
 	 * @param book
 	 * @param sheet
@@ -54,7 +44,7 @@ public interface ISheetWriter {
 	 * @param configs
 	 * @param map
 	 */
-	public void writeRow(Workbook book, Sheet sheet, Row row, List<ColumnConfiguration> configs, Map<String, Object> map);
+	public void writeRow(Workbook book, Sheet sheet, Row row, List<ColumnConfiguration> configs, T map);
 	
 	/**
 	 * Create column header title in the first row. Column title is determined by config.getTitle().
@@ -72,17 +62,7 @@ public interface ISheetWriter {
 	 * @param list
 	 * @param hasTitle
 	 */
-	public void writeSheet(Workbook book, Sheet sheet, List<ColumnConfiguration> configs, List<Map<String, Object>> list, boolean hasTitle);
-	
-	/**
-	 * Fill sheet with data from list. Argument configs contains the configuration information of each column.
-	 * @param book
-	 * @param sheet
-	 * @param configs
-	 * @param list
-	 * @param hasTitle
-	 */
-	public void writeSheet2(Workbook book, Sheet sheet, List<ColumnConfiguration> configs, List<List<Object>> list, boolean hasTitle);
+	public void writeSheet(Workbook book, Sheet sheet, List<ColumnConfiguration> configs, List<T> list, boolean hasTitle);
 	
 	/**
 	 * Create freeze pane.
