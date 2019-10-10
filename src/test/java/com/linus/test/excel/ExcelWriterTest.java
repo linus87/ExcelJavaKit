@@ -81,7 +81,7 @@ public class ExcelWriterTest {
 		// write to excel
 		sheetWriter.writeSheet(wb, sheet, configs, list, true);
 		sheetWriter.freeze(sheet, 0, sheetWriter.getFirstDataRowNum());
-		sheetWriter.setProtectionPassword(sheet, "111111");
+		sheetWriter.setProtectionPassword(sheet, "123456");
 
 		wb.write(fos);
 		fos.close();

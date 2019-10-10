@@ -33,7 +33,6 @@
 		"attachmentType" : null,
 		"api_Name" : "skuId"
 	}, {
-		"sample" : null,
 		"required" : true,
 		"labelName" : "Stock ready Time",
 		"isUnique" : true,
