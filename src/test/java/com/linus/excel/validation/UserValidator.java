@@ -21,7 +21,7 @@ public class UserValidator implements ConstraintValidator<UserChecker, User> {
 			context.buildConstraintViolationWithTemplate("{validation.excel.user.shippingFee.message}")
 				.addConstraintViolation();
 			
-			return user.getShippingFee() > 0;
+			return user.getBalance().doubleValue() > 0;
 		}
 		
 		return true;

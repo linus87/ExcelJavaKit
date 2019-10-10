@@ -3,7 +3,6 @@ package com.linus.excel;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -131,16 +130,20 @@ public abstract class AbstractSheetWriter<T> implements ISheetWriter<T> {
 	 */
 	private void createPercentCell(Workbook book, Row row, ColumnConfiguration config, Object value, CellStyle style) {
 		Cell cell = row.createCell(config.getColumnIndex(), Cell.CELL_TYPE_NUMERIC);
+		
 		style.setAlignment(CellStyle.ALIGN_CENTER);
 		DataFormat df = book.createDataFormat();
 		style.setDataFormat(df.getFormat("0.00%"));
 		cell.setCellStyle(style);
-
-		if (value != null) {
+		
+		if (value != null && value instanceof Number) {
+			cell.setCellValue(((Number)value).doubleValue());
+		} else if (value != null) {
 			cell.setCellValue(value.toString());
-		} else {
+		}  else {
 			cell.setCellType(Cell.CELL_TYPE_BLANK);
 		}
+		
 	}
 
 	/**

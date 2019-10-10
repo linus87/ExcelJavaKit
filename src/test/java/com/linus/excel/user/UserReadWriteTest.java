@@ -134,6 +134,7 @@ public class UserReadWriteTest {
 		user.setFree(free);
 		user.setTime(time);
 		user.setStudent(false);
+		user.setBalance(balance);
 		
 		return user;
 	}

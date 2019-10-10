@@ -1,5 +1,6 @@
 package com.linus.excel.po;
 
+import java.math.BigDecimal;
 import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
@@ -20,7 +21,7 @@ public class User {
 	private Integer age;
 	private Gender gender;
 	private String email;
-	private Double shippingFee;
+	private BigDecimal balance;
 	private String free;
 	private Boolean student;
 	private Date birthday;
@@ -70,13 +71,13 @@ public class User {
 		this.email = email;
 	}
 	
-	@Header(columnIndex=5)
-	public Double getShippingFee() {
-		return shippingFee;
+	@Header(columnIndex=5, rawType="DOUBLE")
+	public BigDecimal getBalance() {
+		return balance;
 	}
 
-	public void setShippingFee(Double shippingFee) {
-		this.shippingFee = shippingFee;
+	public void setBalance(BigDecimal balance) {
+		this.balance = balance;
 	}
 
 	@NotNull
