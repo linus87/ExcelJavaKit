@@ -1,7 +1,5 @@
 package com.linus.excel;
 
-import java.util.Set;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Path;
 import javax.validation.metadata.ConstraintDescriptor;
@@ -9,9 +7,11 @@ import javax.validation.metadata.ConstraintDescriptor;
 public class InvalidRowError<T> implements ConstraintViolation<T> {
 	
 	private int rowIndex;
+	private int colIndex;
+	private Object cellValue;
 	private T value;
+	private Path propertyPath;
 	private String message;
-	private Set<InvalidCellError> cellErrors;
 
 	public InvalidRowError(int rowIndex, T value, String message) {
 		this.rowIndex = rowIndex;
@@ -19,14 +19,20 @@ public class InvalidRowError<T> implements ConstraintViolation<T> {
 		this.message = message;
 	}
 	
-	public Set<InvalidCellError> getCellErrors() {
-		return cellErrors;
+	public InvalidRowError(int rowIndex, int colIndex, Object cellValue, String message) {
+		this.rowIndex = rowIndex;
+		this.colIndex = colIndex;
+		this.cellValue = cellValue;
+		this.message = message;
 	}
-
-	public void setCellErrors(Set<InvalidCellError> cellErrors) {
-		this.cellErrors = cellErrors;
+	
+	public InvalidRowError(int rowIndex, Path property, Object propertyValue, String message) {
+		this.rowIndex = rowIndex;
+		this.cellValue = propertyValue;
+		this.propertyPath = property;
+		this.message = message;
 	}
-
+	
 	public int getRowIndex() {
 		return rowIndex;
 	}
@@ -74,11 +80,10 @@ public class InvalidRowError<T> implements ConstraintViolation<T> {
 
 	public Path getPropertyPath() {
 		// TODO Auto-generated method stub
-		return null;
+		return propertyPath;
 	}
 
 	public Object getInvalidValue() {
-		// TODO Auto-generated method stub
 		return value;
 	}
 

@@ -14,7 +14,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
 import org.apache.poi.ss.usermodel.Sheet;
 
-import com.linus.excel.validation.ExcelValidator;
+import com.linus.excel.validation.MapValidator;
 
 /**
  * SheetReader.readSheet() support localization messages, default message bundle is "ValidationMessages.properties".
@@ -41,20 +41,18 @@ public class MapSheetReader extends AbstractSheetReader<Map<String, Object>> {
 		if (sheet == null) return null;
 		
 		ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		ExcelValidator validator = new ExcelValidator();
+		MapValidator validator = new MapValidator();
 		
 		for (int i = firstRowNum; i <= lastRowNum; i++) {
 			logger.log(Level.INFO,	"Beginning to read row " + i);
 			
 			Map<String, Object> obj = readRow(configs, sheet.getRow(i));
 			if (obj != null) {
-				Set<InvalidCellError> errors  = validator.validate(i, obj, configs);
+				Set<InvalidRowError<Map<String,Object>>> errors  = validator.validate(i, obj, configs);
 				if (errors == null || errors.size() <= 0) {
 					list.add(obj);
 				} else {
-					InvalidRowError<Map<String, Object>> rowError = new InvalidRowError<Map<String, Object>>(i, obj, "Failed to read from row " + i);
-					rowError.setCellErrors(errors);
-					violations.add(rowError);
+					violations.addAll(errors);
 					break;
 				}
 			}

@@ -19,6 +19,7 @@ public class UserValidator implements ConstraintValidator<UserChecker, User> {
 		if ("no".equalsIgnoreCase(user.getFree())) {
 			context.disableDefaultConstraintViolation();
 			context.buildConstraintViolationWithTemplate("{validation.excel.user.shippingFee.message}")
+				.addPropertyNode("balance")
 				.addConstraintViolation();
 			
 			return user.getBalance().doubleValue() > 0;

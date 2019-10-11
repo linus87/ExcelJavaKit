@@ -76,9 +76,7 @@ public class PojoSheetReader<T> extends AbstractSheetReader<T> {
 							list.add(obj);
 						} else {
 							if (constraintViolations != null) {
-								InvalidRowError<T> rowError = new InvalidRowError<T>(i, obj, "Failed to read from row " + i);
-								rowError.setCellErrors(transferConstraintViolation(i, violations));
-								constraintViolations.add(rowError);
+								constraintViolations.addAll(transferConstraintViolation(i, violations));
 								break;
 							}
 						}
@@ -93,12 +91,12 @@ public class PojoSheetReader<T> extends AbstractSheetReader<T> {
 
 	}
 	
-	private Set<InvalidCellError> transferConstraintViolation(int rowNum, Set<ConstraintViolation<T>> violations) {
-		Set<InvalidCellError> errors = new HashSet<InvalidCellError>(violations.size());
+	private Set<InvalidRowError<T>> transferConstraintViolation(int rowNum, Set<ConstraintViolation<T>> violations) {
+		Set<InvalidRowError<T>> errors = new HashSet<InvalidRowError<T>>(violations.size());
 		Iterator<ConstraintViolation<T>> iterator = violations.iterator();
 		while (iterator.hasNext()) {
 			ConstraintViolation<T> violation = iterator.next();
-			InvalidCellError error = new InvalidCellError(rowNum, violation.getPropertyPath().toString(), violation.getInvalidValue(), violation.getMessage());
+			InvalidRowError<T> error = new InvalidRowError<T>(rowNum, violation.getPropertyPath(), violation.getInvalidValue(), violation.getMessage());
 			errors.add(error);
 		}
 		

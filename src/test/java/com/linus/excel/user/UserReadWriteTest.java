@@ -20,7 +20,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
@@ -77,9 +76,10 @@ public class UserReadWriteTest {
 			System.out.println(constraintViolations.size());
 			Iterator<InvalidRowError<User>> violationIter = constraintViolations.iterator();
 			while(violationIter.hasNext()) {
-				ConstraintViolation<User> error = violationIter.next();
+				InvalidRowError<User> error = violationIter.next();
 				logger.log(Level.INFO, "Error message: " + error.getMessage());
 				logger.log(Level.INFO, "Invalid: " + mapper.writeValueAsString(error.getInvalidValue()));
+				logger.log(Level.INFO, "Property: " + error.getPropertyPath());
 			}
 		}		
 		

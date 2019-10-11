@@ -15,7 +15,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 import com.linus.date.DateUtil;
 import com.linus.enums.ICustomEnum;
-import com.linus.excel.validation.ExcelValidator;
+import com.linus.excel.validation.ListValidator;
 
 /**
  * SheetReader.readSheet() support localization messages, default message bundle is "ValidationMessages.properties".
@@ -84,20 +84,18 @@ public class ListSheetReader extends AbstractSheetReader<List<Object>> {
 		if (sheet == null) return null;
 		
 		ArrayList<List<Object>> list = new ArrayList<List<Object>>();
-		ExcelValidator validator = new ExcelValidator();
+		ListValidator validator = new ListValidator();
 		
 		for (int i = firstRowNum; i < lastRowNum; i++) {
 			logger.log(Level.INFO,	"Beginning to read row " + i);
 			
 			List<Object> obj = readRow(sheet.getRow(i));
 			if (obj != null) {
-				Set<InvalidCellError> errors  = validator.validate(i, obj, configs);
+				Set<InvalidRowError<List<Object>>> errors  = validator.validate(i, obj, configs);
 				if (errors == null || errors.size() <= 0) {
 					list.add(obj);
 				} else {
-					InvalidRowError<List<Object>> rowError = new InvalidRowError<List<Object>>(i, obj, null);
-					rowError.setCellErrors(errors);
-					violations.add(rowError);
+					violations.addAll(errors);
 					break;
 				}
 			}

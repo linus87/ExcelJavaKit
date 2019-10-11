@@ -4,90 +4,24 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.linus.excel.ColumnConfiguration;
-import com.linus.excel.InvalidCellError;
+import com.linus.excel.InvalidRowError;
 
 /**
  * Validate data from a row of excel sheet. For each sheet reading, you need to create a new ExcelValidator object.
  * 
  * @author lyan2
  */
-public class ExcelValidator {
-	private Logger logger = Logger.getLogger(ExcelValidator.class.getName());
+public class ListValidator {
+	private Logger logger = Logger.getLogger(ListValidator.class.getName());
 	private String bundleBaseName = "ExcelValidationMessages";
 	private Locale locale;
 	private ResourceBundle bundle;
-	
-	/**
-	 * Validate excel row data. Error message will tell us which row and which column (with column title) has error.
-	 * @param rowIndex
-	 * @param map
-	 * @param configs
-	 * @return
-	 */
-	public Set<InvalidCellError> validate(int rowIndex, Map<String, Object> map, List<ColumnConfiguration> configs) {
-		Set<InvalidCellError> errors = new HashSet<InvalidCellError>();
-		
-		if (configs != null && !configs.isEmpty() && map != null) {
-			for (ColumnConfiguration config : configs) {
-				Object value = map.get(config.getKey());
-				List<ColumnConstraint> constraints = config.getConstraints();
-				for (ColumnConstraint constraint : constraints) {
-					if (!constraint.isValid(value)) {
-						String message = getBundle().getString(constraint.getMessage());
-						String invalidMessage = getBundle().getString("excel.validation.invalidcell.message");
-						invalidMessage = invalidMessage.replaceFirst("\\{row\\}", String.valueOf(rowIndex + 1));
-						invalidMessage = invalidMessage.replaceFirst("\\{title\\}", config.getTitle());
-						invalidMessage += constraint.resolveMessage(message);
-						errors.add(new InvalidCellError(rowIndex, config.getColumnIndex(), value, invalidMessage));
-					}
-				}
-			}
-		}
-		
-		return errors;
-	}
-	
-	/**
-	 * Validate excel row data. Error message will tell us which row and which column (in number) has error.
-	 * @param rowIndex
-	 * @param map
-	 * @param configs
-	 * @return
-	 */
-	public List<InvalidCellError> validate2(int rowIndex, Map<String, Object> map, List<ColumnConfiguration> configs) {
-		List<InvalidCellError> errors = new ArrayList<InvalidCellError>();
-		int hiddenColumnNums = 0;
-		
-		if (configs != null && !configs.isEmpty() && map != null) {
-			for (ColumnConfiguration config : configs) {
-				Object value = map.get(config.getKey());
-				List<ColumnConstraint> constraints = config.getConstraints();
-				for (ColumnConstraint constraint : constraints) {
-					if (!constraint.isValid(value)) {
-						String message = getBundle().getString(constraint.getMessage());
-						String invalidMessage = getBundle().getString("excel.validation.invalidcell.message");
-						invalidMessage = invalidMessage.replaceFirst("\\{row\\}", String.valueOf(rowIndex + 1));
-						invalidMessage = invalidMessage.replaceFirst("\\{column\\}", String.valueOf(config.getColumnIndex() + hiddenColumnNums));
-						invalidMessage += constraint.resolveMessage(message);
-						errors.add(new InvalidCellError(rowIndex, config.getColumnIndex(), value, invalidMessage));
-					}
-				}
-				
-				if (!config.getDisplay()) {
-					hiddenColumnNums++;
-				}
-			}
-		}
-		
-		return errors;
-	}
 	
 	/**
 	 * Validate excel row data.
@@ -96,8 +30,8 @@ public class ExcelValidator {
 	 * @param configs
 	 * @return
 	 */
-	public Set<InvalidCellError> validate(int rowIndex, List<Object> list, List<ColumnConfiguration> configs) {
-		Set<InvalidCellError> errors = new HashSet<InvalidCellError>();
+	public Set<InvalidRowError<List<Object>>> validate(int rowIndex, List<Object> list, List<ColumnConfiguration> configs) {
+		Set<InvalidRowError<List<Object>>> errors = new HashSet<InvalidRowError<List<Object>>>();
 		
 		if (configs != null && !configs.isEmpty() && list != null) {
 			for (ColumnConfiguration config : configs) {
@@ -112,7 +46,7 @@ public class ExcelValidator {
 							invalidMessage = invalidMessage.replaceFirst("\\{row\\}", String.valueOf(rowIndex + 1));
 							invalidMessage = invalidMessage.replaceFirst("\\{title\\}", config.getTitle());
 							invalidMessage += constraint.resolveMessage(message);
-							errors.add(new InvalidCellError(rowIndex, config.getColumnIndex(), value, invalidMessage));
+							errors.add(new InvalidRowError<List<Object>>(rowIndex, config.getColumnIndex(), value, invalidMessage));
 						}
 					} catch(ClassCastException e) {
 						logger.log(Level.WARNING, e.getMessage());
@@ -132,8 +66,8 @@ public class ExcelValidator {
 	 * @param configs
 	 * @return
 	 */
-	public List<InvalidCellError> validate2(int rowIndex, List<Object> list, List<ColumnConfiguration> configs) {
-		List<InvalidCellError> errors = new ArrayList<InvalidCellError>();
+	public List<InvalidRowError<List<Object>>> validate2(int rowIndex, List<Object> list, List<ColumnConfiguration> configs) {
+		List<InvalidRowError<List<Object>>> errors = new ArrayList<InvalidRowError<List<Object>>>();
 		int hiddenColumnNums = 1;
 		
 		if (configs != null && !configs.isEmpty() && list != null) {
@@ -149,7 +83,7 @@ public class ExcelValidator {
 							invalidMessage = invalidMessage.replaceFirst("\\{row\\}", String.valueOf(rowIndex + 1));
 							invalidMessage = invalidMessage.replaceFirst("\\{column\\}", String.valueOf(config.getColumnIndex() + hiddenColumnNums));
 							invalidMessage += constraint.resolveMessage(message);
-							errors.add(new InvalidCellError(rowIndex, config.getColumnIndex(), value, invalidMessage));
+							errors.add(new InvalidRowError<List<Object>>(rowIndex, config.getColumnIndex(), value, invalidMessage));
 						}
 					} catch(ClassCastException e) {
 						logger.log(Level.WARNING, e.getMessage());
