@@ -33,10 +33,9 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linus.excel.ColumnConfiguration;
-import com.linus.excel.ISheetReader;
 import com.linus.excel.ISheetWriter;
 import com.linus.excel.MapSheetWriter;
-import com.linus.excel.SheetReader;
+import com.linus.excel.PojoSheetReader;
 import com.linus.excel.enums.Gender;
 import com.linus.excel.po.User;
 import com.linus.excel.util.ColumnConfigurationParserForPojo;
@@ -61,7 +60,7 @@ public class UserReadWriteTest {
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 		Validator validator = factory.getValidator();
 		
-		ISheetReader sheetReader = new SheetReader();
+		PojoSheetReader sheetReader = new PojoSheetReader();
 		sheetReader.setValidator(validator);
 		
 		File file = new File("excel/sheetreader.xlsx");

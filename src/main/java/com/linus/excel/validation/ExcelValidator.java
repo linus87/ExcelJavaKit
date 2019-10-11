@@ -1,10 +1,12 @@
 package com.linus.excel.validation;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,8 +31,8 @@ public class ExcelValidator {
 	 * @param configs
 	 * @return
 	 */
-	public List<InvalidCellValueError> validate(int rowIndex, Map<String, Object> map, List<ColumnConfiguration> configs) {
-		List<InvalidCellValueError> errors = new ArrayList<InvalidCellValueError>();
+	public Set<InvalidCellValueError> validate(int rowIndex, Map<String, Object> map, List<ColumnConfiguration> configs) {
+		Set<InvalidCellValueError> errors = new HashSet<InvalidCellValueError>();
 		
 		if (configs != null && !configs.isEmpty() && map != null) {
 			for (ColumnConfiguration config : configs) {
@@ -94,8 +96,8 @@ public class ExcelValidator {
 	 * @param configs
 	 * @return
 	 */
-	public List<InvalidCellValueError> validate(int rowIndex, List<Object> list, List<ColumnConfiguration> configs) {
-		List<InvalidCellValueError> errors = new ArrayList<InvalidCellValueError>();
+	public Set<InvalidCellValueError> validate(int rowIndex, List<Object> list, List<ColumnConfiguration> configs) {
+		Set<InvalidCellValueError> errors = new HashSet<InvalidCellValueError>();
 		
 		if (configs != null && !configs.isEmpty() && list != null) {
 			for (ColumnConfiguration config : configs) {

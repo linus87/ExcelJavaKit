@@ -25,7 +25,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.linus.excel.ColumnConfiguration;
 import com.linus.excel.ISheetReader;
-import com.linus.excel.SheetReader;
+import com.linus.excel.ListSheetReader;
+import com.linus.excel.MapSheetReader;
 import com.linus.excel.util.ColumnConfigurationParserForJson;
 import com.linus.excel.validation.ColumnConstraint;
 import com.linus.excel.validation.NotNullColumnConstraint;
@@ -39,7 +40,7 @@ public class ExcelTest {
 	
 //	@Test
 	public void testReaderRowAsList() throws IOException {
-		ISheetReader sheetReader = new SheetReader();
+		ListSheetReader sheetReader = new ListSheetReader();
 		
 		File file = new File("excel/template.xlsx");
 		FileInputStream fis = new FileInputStream(file);
@@ -64,7 +65,7 @@ public class ExcelTest {
 //	@Test
 	public void testReaderRowAsListWithValidation() throws IOException {
 		Set<ConstraintViolation<Object>> constraintViolations = new HashSet<ConstraintViolation<Object>>();
-		ISheetReader sheetReader = new SheetReader();
+		ISheetReader sheetReader = new MapSheetReader();
 		
 		File configFile = new File(ExcelTest.class.getResource("deals.json").getFile());
 		JsonNode tree = mapper.readTree(configFile);
@@ -79,7 +80,7 @@ public class ExcelTest {
 		
 		Sheet sheet = wb.getSheetAt(0);
 		
-		List<List<Object>> list = sheetReader.readSheet2(sheet, configs, 3, constraintViolations);	
+		List<List<Object>> list = sheetReader.readSheet(sheet, configs, 3, constraintViolations);	
 		logger.log(Level.INFO, mapper.writeValueAsString(list));
 		
 		if (constraintViolations.size() > 0) {
@@ -104,7 +105,7 @@ public class ExcelTest {
 	@Test
 	public void testReaderRowAsMapWithValidation() throws IOException {
 		Set<ConstraintViolation<Object>> constraintViolations = new HashSet<ConstraintViolation<Object>>();
-		ISheetReader sheetReader = new SheetReader();
+		ISheetReader sheetReader = new MapSheetReader();
 		
 		File configFile = new File(ExcelTest.class.getResource("deals.json").getFile());
 		JsonNode tree = mapper.readTree(configFile);
