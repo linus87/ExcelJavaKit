@@ -1,13 +1,13 @@
 package com.linus.excel;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Time;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.validation.Validator;
 
 import org.apache.poi.ss.usermodel.Cell;
 
@@ -18,6 +18,40 @@ public abstract class AbstractSheetReader<T> implements ISheetReader<T> {
 	private final Logger logger = Logger.getLogger(AbstractSheetReader.class.getName());
 	
 	protected SimpleDateFormat timeformat = new SimpleDateFormat("HH:mm:ss");
+	
+	@SuppressWarnings("unchecked")
+	public static <T extends Number> T parseNumber(String text, Class<T> targetClass) {
+		String trimmed = text.trim();
+
+		if (Byte.class == targetClass) {
+			return (T) (isHexNumber(trimmed) ? Byte.decode(trimmed) : Byte.valueOf(trimmed));
+		}
+		else if (Short.class == targetClass) {
+			return (T) (isHexNumber(trimmed) ? Short.decode(trimmed) : Short.valueOf(trimmed));
+		}
+		else if (Integer.class == targetClass) {
+			return (T) (isHexNumber(trimmed) ? Integer.decode(trimmed) : Integer.valueOf(trimmed));
+		}
+		else if (Long.class == targetClass) {
+			return (T) (isHexNumber(trimmed) ? Long.decode(trimmed) : Long.valueOf(trimmed));
+		}
+		else if (BigInteger.class == targetClass) {
+			return (T) (isHexNumber(trimmed) ? decodeBigInteger(trimmed) : new BigInteger(trimmed));
+		}
+		else if (Float.class == targetClass) {
+			return (T) Float.valueOf(trimmed);
+		}
+		else if (Double.class == targetClass) {
+			return (T) Double.valueOf(trimmed);
+		}
+		else if (BigDecimal.class == targetClass || Number.class == targetClass) {
+			return (T) new BigDecimal(trimmed);
+		}
+		else {
+			throw new IllegalArgumentException(
+					"Cannot convert String [" + text + "] to target class [" + targetClass.getName() + "]");
+		}
+	}
 	
 	public Object readCell(Cell cell) {
 		if (cell == null) return null;
@@ -87,27 +121,35 @@ public abstract class AbstractSheetReader<T> implements ISheetReader<T> {
 	 * @param type
 	 * @return
 	 */
-	protected Object resolveDouble(Double cellVal, Class<?> type) {
+	protected Object resolveNumber(String cellVal, Class<?> type) {
+		Double  value = new Double(cellVal);
+		
 		if (Integer.class.isAssignableFrom(type) || int.class.isAssignableFrom(type)) {
-			return cellVal.intValue();
+			return value.intValue();
 		} else if (Long.class.isAssignableFrom(type) || long.class.isAssignableFrom(type)) {
-			return cellVal.longValue();
+			return value.longValue();
 		} else if (Double.class.isAssignableFrom(type) || double.class.isAssignableFrom(type)) {
-			return cellVal;
+			return value;
 		} else if (Float.class.isAssignableFrom(type) || float.class.isAssignableFrom(type)) {
-			return cellVal.floatValue();
+			return value.floatValue();
 		} else if (Short.class.isAssignableFrom(type) || short.class.isAssignableFrom(type)) {
-			return cellVal.shortValue();
+			return value.shortValue();
 		} else if (Byte.class.isAssignableFrom(type) || byte.class.isAssignableFrom(type)) {
-			return cellVal.byteValue();
+			return value.byteValue();
+		} else if (BigInteger.class.isAssignableFrom(type)) {
+			return new BigInteger(cellVal);
+		} else if (BigDecimal.class.isAssignableFrom(type)) {
+			return new BigDecimal(cellVal);
 		} else if (String.class.isAssignableFrom(type)) {
-			return cellVal.toString();
+			return value.toString();
 		} else if (Boolean.class.isAssignableFrom(type) || boolean.class.isAssignableFrom(type)) {
-			return cellVal.intValue() == 1;
+			return value.intValue() == 1;
 		}
 		
 		return null;
 	}
+	
+	
 
 	/**
 	 * Read Integer, Long, Double, Short, Byte, Float, Boolean and String from number cell. 
@@ -132,7 +174,7 @@ public abstract class AbstractSheetReader<T> implements ISheetReader<T> {
 			return formatNumber(cellVal);
 		}
 		
-		return resolveDouble(cellVal, type);
+		return resolveNumber(cellVal.toString(), type);
 	}
 	
 	/**
@@ -159,9 +201,8 @@ public abstract class AbstractSheetReader<T> implements ISheetReader<T> {
 				|| Float.class.isAssignableFrom(type)
 				|| Short.class.isAssignableFrom(type) 
 				|| Byte.class.isAssignableFrom(type)) {
-			Double cellVal = new Double(text);
 			
-			return resolveDouble(cellVal, type);
+			return resolveNumber(text, type);
 		} else if (type.isEnum()) {
 			if (ICustomEnum.class.isAssignableFrom(type)) {
 				return resolveExcelEnum(text, (Class<ICustomEnum>)type);
@@ -205,4 +246,47 @@ public abstract class AbstractSheetReader<T> implements ISheetReader<T> {
 		return null;
 	}
 	
+	/**
+	 * Determine whether the given {@code value} String indicates a hex number,
+	 * i.e. needs to be passed into {@code Integer.decode} instead of
+	 * {@code Integer.valueOf}, etc.
+	 */
+	private static boolean isHexNumber(String value) {
+		int index = (value.startsWith("-") ? 1 : 0);
+		return (value.startsWith("0x", index) || value.startsWith("0X", index) || value.startsWith("#", index));
+	}
+	
+	/**
+	 * Decode a {@link java.math.BigInteger} from the supplied {@link String} value.
+	 * <p>Supports decimal, hex, and octal notation.
+	 * @see BigInteger#BigInteger(String, int)
+	 */
+	private static BigInteger decodeBigInteger(String value) {
+		int radix = 10;
+		int index = 0;
+		boolean negative = false;
+
+		// Handle minus sign, if present.
+		if (value.startsWith("-")) {
+			negative = true;
+			index++;
+		}
+
+		// Handle radix specifier, if present.
+		if (value.startsWith("0x", index) || value.startsWith("0X", index)) {
+			index += 2;
+			radix = 16;
+		}
+		else if (value.startsWith("#", index)) {
+			index++;
+			radix = 16;
+		}
+		else if (value.startsWith("0", index) && value.length() > 1 + index) {
+			index++;
+			radix = 8;
+		}
+
+		BigInteger result = new BigInteger(value.substring(index), radix);
+		return (negative ? result.negate() : result);
+	}
 }
