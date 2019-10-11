@@ -135,8 +135,7 @@ public class PojoSheetReader<T> extends AbstractSheetReader<T> {
 				
 				Cell cell = row.getCell(header.getColumnIndex(), MissingCellPolicy.RETURN_NULL_AND_BLANK);
 				Method setter = header.getPropertyDescriptor().getWriteMethod();
-				Object value = readCell(cell, header.getPropertyDescriptor()
-						.getReadMethod().getReturnType());
+				Object value = readCell(cell, header.getPropertyDescriptor().getReadMethod().getReturnType());
 
 				logger.log(Level.INFO, "Property "
 						+ header.getPropertyDescriptor().getName()

@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.sql.Time;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -170,6 +171,9 @@ public abstract class AbstractSheetReader<T> implements ISheetReader<T> {
 		} else if (Date.class.isAssignableFrom(type)) {
 			logger.log(Level.INFO, "Date cell value is " + cellVal);
 			return cell.getDateCellValue();
+		} else if (Calendar.class.isAssignableFrom(type)) {
+			logger.log(Level.INFO, "Date cell value is " + cellVal);
+			return new Calendar.Builder().setInstant(cell.getDateCellValue()).build();
 		} else if (String.class.isAssignableFrom(type)) {
 			return formatNumber(cellVal);
 		}
@@ -195,6 +199,8 @@ public abstract class AbstractSheetReader<T> implements ISheetReader<T> {
 			return DateUtil.parseTime(text);
 		} else if (Date.class.isAssignableFrom(type)) {
 			return DateUtil.parseDate(text);
+		} else if (Calendar.class.isAssignableFrom(type)) {
+			return new Calendar.Builder().setInstant(DateUtil.parseDate(text)).build();
 		} else if (Integer.class.isAssignableFrom(type)
 				|| Long.class.isAssignableFrom(type)
 				|| Double.class.isAssignableFrom(type)
