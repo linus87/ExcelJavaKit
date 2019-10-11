@@ -91,7 +91,7 @@ public class ListSheetReader extends AbstractSheetReader<List<Object>> {
 			
 			List<Object> obj = readRow(sheet.getRow(i));
 			if (obj != null) {
-				Set<InvalidCellValueError> errors  = validator.validate(i, obj, configs);
+				Set<InvalidCellError> errors  = validator.validate(i, obj, configs);
 				if (errors == null || errors.size() <= 0) {
 					list.add(obj);
 				} else {

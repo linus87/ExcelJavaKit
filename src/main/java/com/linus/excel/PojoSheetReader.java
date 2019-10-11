@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -75,7 +76,8 @@ public class PojoSheetReader<T> extends AbstractSheetReader<T> {
 							list.add(obj);
 						} else {
 							if (constraintViolations != null) {
-								InvalidRowError<T> rowError = new InvalidRowError<T>(i, obj, null);
+								InvalidRowError<T> rowError = new InvalidRowError<T>(i, obj, "Failed to read from row " + i);
+								rowError.setCellErrors(transferConstraintViolation(i, violations));
 								constraintViolations.add(rowError);
 								break;
 							}
@@ -89,6 +91,18 @@ public class PojoSheetReader<T> extends AbstractSheetReader<T> {
 		
 		return list;
 
+	}
+	
+	private Set<InvalidCellError> transferConstraintViolation(int rowNum, Set<ConstraintViolation<T>> violations) {
+		Set<InvalidCellError> errors = new HashSet<InvalidCellError>(violations.size());
+		Iterator<ConstraintViolation<T>> iterator = violations.iterator();
+		while (iterator.hasNext()) {
+			ConstraintViolation<T> violation = iterator.next();
+			InvalidCellError error = new InvalidCellError(rowNum, violation.getPropertyPath().toString(), violation.getInvalidValue(), violation.getMessage());
+			errors.add(error);
+		}
+		
+		return errors;
 	}
 	
 	/**

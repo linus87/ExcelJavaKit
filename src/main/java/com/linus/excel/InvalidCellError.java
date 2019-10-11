@@ -4,14 +4,27 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Path;
 import javax.validation.metadata.ConstraintDescriptor;
 
-public class InvalidCellValueError implements ConstraintViolation<Object> {
+public class InvalidCellError implements ConstraintViolation<Object> {
+	
+	private int colIndex;
+	private int rowIndex;
+	private Object cellValue;
+	private String message;
+	private String property;
 
-	public InvalidCellValueError(int rowIndex, int colIndex, Object value, String message) {
+	public InvalidCellError(int rowIndex, int colIndex, Object value, String message) {
 		this.rowIndex = rowIndex;
 		this.colIndex = colIndex;
 		this.cellValue = value;
 		this.message = message;
-	}	
+	}
+	
+	public InvalidCellError(int rowIndex, String property, Object value, String message) {
+		this.rowIndex = rowIndex;
+		this.property = property;
+		this.cellValue = value;
+		this.message = message;
+	}
 	
 	public int getColIndex() {
 		return colIndex;
@@ -45,10 +58,14 @@ public class InvalidCellValueError implements ConstraintViolation<Object> {
 		this.message = message;
 	}
 
-	private int colIndex;
-	private int rowIndex;
-	private Object cellValue;
-	private String message;
+	public String getProperty() {
+		return property;
+	}
+
+	public void setProperty(String property) {
+		this.property = property;
+	}
+
 	public String getMessageTemplate() {
 		// TODO Auto-generated method stub
 		return null;

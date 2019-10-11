@@ -48,11 +48,11 @@ public class MapSheetReader extends AbstractSheetReader<Map<String, Object>> {
 			
 			Map<String, Object> obj = readRow(configs, sheet.getRow(i));
 			if (obj != null) {
-				Set<InvalidCellValueError> errors  = validator.validate(i, obj, configs);
+				Set<InvalidCellError> errors  = validator.validate(i, obj, configs);
 				if (errors == null || errors.size() <= 0) {
 					list.add(obj);
 				} else {
-					InvalidRowError<Map<String, Object>> rowError = new InvalidRowError<Map<String, Object>>(i, obj, null);
+					InvalidRowError<Map<String, Object>> rowError = new InvalidRowError<Map<String, Object>>(i, obj, "Failed to read from row " + i);
 					rowError.setCellErrors(errors);
 					violations.add(rowError);
 					break;

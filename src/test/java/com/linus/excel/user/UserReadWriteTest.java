@@ -34,6 +34,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linus.excel.ColumnConfiguration;
 import com.linus.excel.ISheetWriter;
+import com.linus.excel.InvalidRowError;
 import com.linus.excel.MapSheetWriter;
 import com.linus.excel.PojoSheetReader;
 import com.linus.excel.enums.Gender;
@@ -54,13 +55,13 @@ public class UserReadWriteTest {
 	
 	@Test
 	public void testReader() throws IOException {
-		Set<ConstraintViolation<User>> constraintViolations = new HashSet<ConstraintViolation<User>>();
+		Set<InvalidRowError<User>> constraintViolations = new HashSet<InvalidRowError<User>>();
 		// preparing validation
 //		ValidatorFactory factory = Validation.byDefaultProvider().configure().messageInterpolator(new ResourceBundleMessageInterpolator(new PlatformResourceBundleLocator("ExcelValidationMessages"))).buildValidatorFactory();
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 		Validator validator = factory.getValidator();
 		
-		PojoSheetReader sheetReader = new PojoSheetReader();
+		PojoSheetReader<User> sheetReader = new PojoSheetReader<User>();
 		sheetReader.setValidator(validator);
 		
 		File file = new File("excel/user_reader.xlsx");
@@ -74,11 +75,11 @@ public class UserReadWriteTest {
 		
 		if (constraintViolations != null) {
 			System.out.println(constraintViolations.size());
-			Iterator<ConstraintViolation<User>> violationIter = constraintViolations.iterator();
+			Iterator<InvalidRowError<User>> violationIter = constraintViolations.iterator();
 			while(violationIter.hasNext()) {
 				ConstraintViolation<User> error = violationIter.next();
 				logger.log(Level.INFO, "Error message: " + error.getMessage());
-				logger.log(Level.INFO, "Invalid: " + error.getInvalidValue());
+				logger.log(Level.INFO, "Invalid: " + mapper.writeValueAsString(error.getInvalidValue()));
 			}
 		}		
 		

@@ -11,7 +11,7 @@ public class InvalidRowError<T> implements ConstraintViolation<T> {
 	private int rowIndex;
 	private T value;
 	private String message;
-	private Set<InvalidCellValueError> cellErrors;
+	private Set<InvalidCellError> cellErrors;
 
 	public InvalidRowError(int rowIndex, T value, String message) {
 		this.rowIndex = rowIndex;
@@ -19,11 +19,11 @@ public class InvalidRowError<T> implements ConstraintViolation<T> {
 		this.message = message;
 	}
 	
-	public Set<InvalidCellValueError> getCellErrors() {
+	public Set<InvalidCellError> getCellErrors() {
 		return cellErrors;
 	}
 
-	public void setCellErrors(Set<InvalidCellValueError> cellErrors) {
+	public void setCellErrors(Set<InvalidCellError> cellErrors) {
 		this.cellErrors = cellErrors;
 	}
 
@@ -79,7 +79,7 @@ public class InvalidRowError<T> implements ConstraintViolation<T> {
 
 	public Object getInvalidValue() {
 		// TODO Auto-generated method stub
-		return null;
+		return value;
 	}
 
 	public ConstraintDescriptor<?> getConstraintDescriptor() {
