@@ -77,9 +77,8 @@ public class UserReadWriteTest {
 			Iterator<InvalidRowError<User>> violationIter = constraintViolations.iterator();
 			while(violationIter.hasNext()) {
 				InvalidRowError<User> error = violationIter.next();
-				logger.log(Level.INFO, "Error message: " + error.getMessage());
+				logger.log(Level.INFO, "Wrong property: " + error.getPropertyPath() + ", Error message: " + error.getMessage());
 				logger.log(Level.INFO, "Invalid: " + mapper.writeValueAsString(error.getInvalidValue()));
-				logger.log(Level.INFO, "Property: " + error.getPropertyPath());
 			}
 		}		
 		

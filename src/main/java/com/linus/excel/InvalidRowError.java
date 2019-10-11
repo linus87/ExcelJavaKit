@@ -9,16 +9,10 @@ public class InvalidRowError<T> implements ConstraintViolation<T> {
 	private int rowIndex;
 	private int colIndex;
 	private Object cellValue;
-	private T value;
+	private Object value;
 	private Path propertyPath;
 	private String message;
 
-	public InvalidRowError(int rowIndex, T value, String message) {
-		this.rowIndex = rowIndex;
-		this.value = value;
-		this.message = message;
-	}
-	
 	public InvalidRowError(int rowIndex, int colIndex, Object cellValue, String message) {
 		this.rowIndex = rowIndex;
 		this.colIndex = colIndex;
@@ -26,9 +20,9 @@ public class InvalidRowError<T> implements ConstraintViolation<T> {
 		this.message = message;
 	}
 	
-	public InvalidRowError(int rowIndex, Path property, Object propertyValue, String message) {
+	public InvalidRowError(int rowIndex, Object bean, Path property, String message) {
 		this.rowIndex = rowIndex;
-		this.cellValue = propertyValue;
+		this.value = bean;
 		this.propertyPath = property;
 		this.message = message;
 	}
@@ -55,7 +49,7 @@ public class InvalidRowError<T> implements ConstraintViolation<T> {
 	}
 
 	public T getRootBean() {
-		return value;
+		return (T)value;
 	}
 
 	public Class<T> getRootBeanClass() {
@@ -84,7 +78,7 @@ public class InvalidRowError<T> implements ConstraintViolation<T> {
 	}
 
 	public Object getInvalidValue() {
-		return value;
+		return value != null ? value : cellValue;
 	}
 
 	public ConstraintDescriptor<?> getConstraintDescriptor() {
@@ -95,5 +89,21 @@ public class InvalidRowError<T> implements ConstraintViolation<T> {
 	public <U> U unwrap(Class<U> type) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public int getColIndex() {
+		return colIndex;
+	}
+
+	public void setColIndex(int colIndex) {
+		this.colIndex = colIndex;
+	}
+
+	public Object getCellValue() {
+		return cellValue;
+	}
+
+	public void setCellValue(Object cellValue) {
+		this.cellValue = cellValue;
 	}
 }

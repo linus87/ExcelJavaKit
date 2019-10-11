@@ -96,7 +96,7 @@ public class PojoSheetReader<T> extends AbstractSheetReader<T> {
 		Iterator<ConstraintViolation<T>> iterator = violations.iterator();
 		while (iterator.hasNext()) {
 			ConstraintViolation<T> violation = iterator.next();
-			InvalidRowError<T> error = new InvalidRowError<T>(rowNum, violation.getPropertyPath(), violation.getInvalidValue(), violation.getMessage());
+			InvalidRowError<T> error = new InvalidRowError<T>(rowNum, violation.getInvalidValue(), violation.getPropertyPath(), violation.getMessage());
 			errors.add(error);
 		}
 		
