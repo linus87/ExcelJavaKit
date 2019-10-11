@@ -39,7 +39,7 @@ import com.linus.excel.MapSheetWriter;
 import com.linus.excel.SheetReader;
 import com.linus.excel.enums.Gender;
 import com.linus.excel.po.User;
-import com.linus.excel.po.util.ExcelUtil;
+import com.linus.excel.util.ColumnConfigurationParserForPojo;
 
 import junit.framework.Assert;
 
@@ -104,7 +104,7 @@ public class UserReadWriteTest {
 		
 		Sheet sheet = wb.createSheet();
 		
-		ArrayList<ColumnConfiguration> configs = ExcelUtil.getColumnConfigurations(User.class, Locale.CHINA, bundle);
+		ArrayList<ColumnConfiguration> configs = ColumnConfigurationParserForPojo.getColumnConfigurations(User.class, Locale.CHINA, bundle);
 		
 		List<Map<String, Object>> users = new ArrayList<Map<String, Object>>(3);
 		users.add(mapper.convertValue(createUser("Linus", "Yan", 30, Gender.MALE, "lyan2@ebay.com", BigDecimal.ONE, "yes", true, new Date(), "error", new Time(Calendar.getInstance().getTimeInMillis()), 0.1, Calendar.getInstance()), Map.class));

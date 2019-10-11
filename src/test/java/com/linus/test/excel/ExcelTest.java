@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.linus.excel.ColumnConfiguration;
 import com.linus.excel.ISheetReader;
 import com.linus.excel.SheetReader;
-import com.linus.excel.util.ExcelUtil;
+import com.linus.excel.util.ColumnConfigurationParserForJson;
 import com.linus.excel.validation.ColumnConstraint;
 import com.linus.excel.validation.NotNullColumnConstraint;
 
@@ -68,7 +68,7 @@ public class ExcelTest {
 		
 		File configFile = new File(ExcelTest.class.getResource("deals.json").getFile());
 		JsonNode tree = mapper.readTree(configFile);
-		ArrayList<ColumnConfiguration> configs = ExcelUtil.getColumnConfigurations((ArrayNode)tree, Locale.CHINA);
+		ArrayList<ColumnConfiguration> configs = ColumnConfigurationParserForJson.getColumnConfigurations((ArrayNode)tree, Locale.CHINA);
 		adjustColumnConfigurations(configs);
 		
 		logger.log(Level.INFO, mapper.writeValueAsString(configs));
@@ -108,7 +108,7 @@ public class ExcelTest {
 		
 		File configFile = new File(ExcelTest.class.getResource("deals.json").getFile());
 		JsonNode tree = mapper.readTree(configFile);
-		ArrayList<ColumnConfiguration> configs = ExcelUtil.getColumnConfigurations((ArrayNode)tree, Locale.CHINA);
+		ArrayList<ColumnConfiguration> configs = ColumnConfigurationParserForJson.getColumnConfigurations((ArrayNode)tree, Locale.CHINA);
 		adjustColumnConfigurations(configs);
 		
 		logger.log(Level.INFO, mapper.writeValueAsString(configs));

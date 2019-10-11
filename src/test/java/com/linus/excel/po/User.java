@@ -47,7 +47,7 @@ public class User {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	@Header(columnIndex=2)
+	@Header(columnIndex=2, rawType="INTEGER")
 	public Integer getAge() {
 		return age;
 	}

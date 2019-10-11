@@ -28,7 +28,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 import com.linus.date.DateUtil;
 import com.linus.enums.ICustomEnum;
-import com.linus.excel.util.ExcelUtil;
+import com.linus.excel.util.ColumnConfigurationParserForJson;
 import com.linus.excel.validation.ExcelValidator;
 
 /**
@@ -199,7 +199,7 @@ public class SheetReader implements ISheetReader {
 			 headers = sheetHeaders.get(clazz);
 		} else {
 			try {
-				headers = ExcelUtil.getColumnConfigurations(clazz);
+				headers = ColumnConfigurationParserForJson.getColumnConfigurations(clazz);
 			} catch (IntrospectionException e) {
 				logger.log(Level.SEVERE, "Failed to get column configuration from class - " + clazz.getName() + ", due to bean instropection exception.");
 			}

@@ -42,6 +42,9 @@ public abstract class AbstractSheetWriter<T> implements ISheetWriter<T> {
 		}
 
 		switch (config.getRawType().toUpperCase()) {
+		case "INTEGER":
+			createIntCell(book, row, config, value, cellStyle);
+			break;
 		case "DOUBLE":
 			createDoubleCell(book, row, config, value, cellStyle);
 			break;
@@ -199,6 +202,39 @@ public abstract class AbstractSheetWriter<T> implements ISheetWriter<T> {
 			} else {
 				try {
 					cell.setCellValue(Double.parseDouble(value.toString()));
+				} catch (Exception e) {
+					logger.log(Level.WARNING, "Double cell value is not a valid double number.");
+				}
+			}
+		} else {
+			cell.setCellType(Cell.CELL_TYPE_BLANK);
+		}
+	}
+	
+	/**
+	 * Horizontal align datetime right. Decimal digits are determined by
+	 * DoubleColumnConstraint.getDigits().
+	 * 
+	 * if value is LinkedHashMap object, it's treated like {value:#.##,
+	 * currency:'RMB'}.
+	 * 
+	 * @param book
+	 * @param row
+	 * @param config
+	 * @param value
+	 */
+	private void createIntCell(Workbook book, Row row, ColumnConfiguration config, Object value, CellStyle style) {
+		Cell cell = row.createCell(config.getColumnIndex(), Cell.CELL_TYPE_NUMERIC);
+		style.setAlignment(CellStyle.ALIGN_RIGHT);
+
+		cell.setCellStyle(style);
+
+		if (value != null) {
+			if (value instanceof Number) {
+				cell.setCellValue(((Number) value).intValue());
+			} else {
+				try {
+					cell.setCellValue(Integer.parseInt(value.toString()));
 				} catch (Exception e) {
 					logger.log(Level.WARNING, "Double cell value is not a valid double number.");
 				}
