@@ -43,6 +43,7 @@ public class ColumnConfigurationParserForPojo {
 					config.setColumnIndex(h.columnIndex());
 					config.setWritable(h.writable());
 					config.setRawType(h.rawType());
+					config.setDisplay(h.display());
 					config.setPropertyDescriptor(descriptor);
 					configs.add(config);
 				}

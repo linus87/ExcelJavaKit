@@ -117,7 +117,7 @@ public class User {
 		this.completed = completed;
 	}
 
-	@Header(columnIndex=12, rawType="DATETIME")
+	@Header(columnIndex=12, rawType="DATETIME", display=false)
 	public Calendar getEnd() {
 		return end;
 	}
