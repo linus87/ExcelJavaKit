@@ -26,6 +26,8 @@ import com.linus.excel.util.ColumnConfigurationParserForJson;
 import com.linus.excel.validation.ColumnConstraint;
 import com.linus.excel.validation.NotNullColumnConstraint;
 
+import javafx.scene.text.FontWeight;
+
 public class ExcelWriterTest {
 	private final Logger logger = Logger.getLogger(ExcelWriterTest.class.getName());
 
@@ -75,7 +77,7 @@ public class ExcelWriterTest {
 		Font titleFont = wb.createFont();
 		titleFont.setFontName("Arial");
 		titleFont.setFontHeightInPoints((short) 9);
-		titleFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		titleFont.setBold(true);
 		sheetWriter.setTitleFont(titleFont);
 
 		// write to excel

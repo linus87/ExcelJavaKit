@@ -1,14 +1,8 @@
 package com.linus.excel;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
 
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -22,41 +16,28 @@ import com.linus.excel.validation.ColumnConstraint;
 import com.linus.excel.validation.IntegerRangeColumnConstraint;
 import com.linus.excel.validation.RangeColumnConstraint;
 
-/**
- * 
- * @author lyan2
- */
-public class MapSheetWriter extends AbstractSheetWriter<Map<String, Object>> {
-	private final Logger logger = Logger.getLogger(MapSheetWriter.class.getName());
-	private Map<Integer, CellStyle> styleMapping = new HashMap<Integer, CellStyle>();
+public class ArrayListSheetWriter<T> extends AbstractSheetWriter<T[]> {
 
 	@Override
-	public void writeRow(Workbook book, Sheet sheet, Row row, List<ColumnConfiguration> configs, Map<String, Object> map) {
+	public void writeRow(Workbook book, Sheet sheet, Row row, List<ColumnConfiguration> configs, T[] array) {
 		for (ColumnConfiguration config : configs) {
 			if (config != null) {
-				CellStyle cellStyle = styleMapping.get(config.getColumnIndex());
-				if (cellStyle == null) {
-					cellStyle = book.createCellStyle();
-					cellStyle.setLocked(!config.getWritable());
-					cellStyle.setFont(defaultFont);
-					cellStyle.setWrapText(true);
-					styleMapping.put(config.getColumnIndex(), cellStyle);
-				}
-				createCell(book, sheet, row, config, map.get(config.getKey()), cellStyle);
+				CellStyle cellStyle = getDataCellStyle(book, config.getColumnIndex());
+				createCell(book, sheet, row, config, array[config.getColumnIndex()], cellStyle);
 			}
 		}
 	}
 
 	@Override
-	public void writeSheet(Workbook book, Sheet sheet, List<ColumnConfiguration> configs,
-			List<Map<String, Object>> list, boolean hasTitle) {
+	public void writeSheet(Workbook book, Sheet sheet, List<ColumnConfiguration> configs, List<T[]> list,
+			boolean hasTitle) {
 		if (hasTitle)
 			createTitle(book, sheet, configs);
 
 		int rowNum = firstDataRowNum;
-		for (Map<String, Object> map : list) {
+		for (T[] data : list) {
 			Row row = sheet.createRow(rowNum++);
-			writeRow(book, sheet, row, configs, map);
+			writeRow(book, sheet, row, configs, data);
 		}
 
 		for (ColumnConfiguration config : configs) {
@@ -126,70 +107,6 @@ public class MapSheetWriter extends AbstractSheetWriter<Map<String, Object>> {
 		}
 
 		adjustColumnWidth(sheet, configs);
-	}
-	
-	@Override
-	public void createTitle(Workbook book, Sheet sheet, List<ColumnConfiguration> configs) {
-		Row row = sheet.createRow(firstDataRowNum++);
-		CellStyle headerStyle = book.createCellStyle();
-		headerStyle.setAlignment(HorizontalAlignment.CENTER);
-		headerStyle.setFillForegroundColor(IndexedColors.LIME.getIndex());
-		headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-		headerStyle.setFont(titleFont);
-		headerStyle.setWrapText(true);
-
-		for (ColumnConfiguration config : configs) {
-			if (config != null) {
-				createCell(book, sheet, row, config.getColumnIndex(), config.getTitle(), headerStyle);
-			}
-		}
-	}
-
-	public void createSubHead(Workbook book, Sheet sheet, List<ColumnConfiguration> configs) {
-		Row row = sheet.createRow(firstDataRowNum++);
-		CellStyle headerStyle = book.createCellStyle();
-		headerStyle.setAlignment(HorizontalAlignment.CENTER);
-		headerStyle.setFillForegroundColor(IndexedColors.LIME.getIndex());
-		headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-		headerStyle.setFont(this.defaultFont);
-		headerStyle.setWrapText(true);
-
-		for (ColumnConfiguration config : configs) {
-			if (config != null) {
-				createCell(book, sheet, row, config.getColumnIndex(), config.getLabel(), headerStyle);
-			}
-		}
-	}
-
-	public int getFirstDataRowNum() {
-		return firstDataRowNum;
-	}
-
-	public void setFirstDataRowNum(int firstDataRowNum) {
-		this.firstDataRowNum = firstDataRowNum;
-	}
-
-	/**
-	 * Create a row filled with sample data.
-	 * 
-	 * @param book
-	 * @param sheet
-	 * @param configs
-	 */
-	public void createSampleRow(Workbook book, Sheet sheet, List<ColumnConfiguration> configs) {
-		Row row = sheet.createRow(firstDataRowNum++);
-
-		// sample data is locked;
-		CellStyle style = book.createCellStyle();
-		style.setLocked(true);
-		style.setWrapText(true);
-		style.setFont(defaultFont);
-
-		for (ColumnConfiguration config : configs) {
-			if (config != null) {
-				createCell(book, row, config, config.getSample(), style);
-			}
-		}
 	}
 
 }

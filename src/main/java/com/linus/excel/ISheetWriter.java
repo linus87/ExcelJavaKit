@@ -47,14 +47,6 @@ public interface ISheetWriter<T> {
 	public void writeRow(Workbook book, Sheet sheet, Row row, List<ColumnConfiguration> configs, T map);
 	
 	/**
-	 * Create column header title in the first row. Column title is determined by config.getTitle().
-	 * @param book
-	 * @param sheet
-	 * @param configs
-	 */
-	public void createTitle(Workbook book, Sheet sheet, List<ColumnConfiguration> configs);
-	
-	/**
 	 * Fill sheet with data from list. Argument configs contains the configuration information of each column.
 	 * @param book
 	 * @param sheet
@@ -71,19 +63,25 @@ public interface ISheetWriter<T> {
 	 * @param freezeCols
 	 * @param freezeRows
 	 */
-	public void freeze(Sheet sheet, int freezeCols, int freezeRows);
+	public default void freeze(Sheet sheet, int freezeCols, int freezeRows) {
+		sheet.createFreezePane(freezeCols, freezeRows);
+	}
 	
 	/**
 	 * Hide a column
 	 * @param sheet
 	 * @param hiddenCol
 	 */
-	public void hideColumn(Sheet sheet, int hiddenCol);
+	public default void hideColumn(Sheet sheet, int hiddenCol) {
+		sheet.setColumnHidden(hiddenCol, true);
+	}
 	
 	/**
 	 * Set protection password
 	 * @param password
 	 */
-	public void setProtectionPassword(Sheet sheet, String password);
+	public default void setProtectionPassword(Sheet sheet, String password) {
+		sheet.protectSheet(password);
+	}
 	
 }
