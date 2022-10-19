@@ -44,7 +44,7 @@ public interface ISheetWriter<T> {
 	 * @param configs
 	 * @param map
 	 */
-	public void writeRow(Workbook book, Sheet sheet, Row row, List<ColumnConfiguration> configs, T map);
+	public void writeRow(Workbook book, Sheet sheet, Row row, T map);
 	
 	/**
 	 * Fill sheet with data from list. Argument configs contains the configuration information of each column.
@@ -54,7 +54,7 @@ public interface ISheetWriter<T> {
 	 * @param list
 	 * @param hasTitle
 	 */
-	public void writeSheet(Workbook book, Sheet sheet, List<ColumnConfiguration> configs, List<T> list, boolean hasTitle);
+	public void writeSheet(Workbook book, Sheet sheet, List<T> list, boolean hasTitle);
 	
 	/**
 	 * Create freeze pane.

@@ -22,16 +22,19 @@ import com.linus.excel.validation.IntegerRangeColumnConstraint;
 import com.linus.excel.validation.RangeColumnConstraint;
 
 public class PojoSheetWriter<T> extends AbstractSheetWriter<T> {
+    
+    private final Logger log = LoggerFactory.getLogger(PojoSheetWriter.class);
 
-	private final Logger log = LoggerFactory.getLogger(PojoSheetWriter.class);
+	public PojoSheetWriter(Workbook book, List<ColumnConfiguration> configs) {
+        super(book, configs);
+    }
 
 	@Override
-	public void writeRow(Workbook book, Sheet sheet, Row row,
-			List<ColumnConfiguration> configs, T data) {
+	public void writeRow(Workbook book, Sheet sheet, Row row, T data) {
 
 		for (ColumnConfiguration config : configs) {
 			if (config != null) {
-				CellStyle cellStyle = getDataCellStyle(book, config.getColumnIndex());
+				CellStyle cellStyle = getDataCellStyle(config.getColumnIndex());
 				
 				PropertyDescriptor property = config.getPropertyDescriptor();
 				Method readMethod = property.getReadMethod(); 
@@ -49,15 +52,15 @@ public class PojoSheetWriter<T> extends AbstractSheetWriter<T> {
 	}
 
 	@Override
-	public void writeSheet(Workbook book, Sheet sheet,
-			List<ColumnConfiguration> configs, List<T> list, boolean hasTitle) {
+	public void writeSheet(Workbook book, Sheet sheet, List<T> list, boolean hasTitle) {
+	    
 		if (hasTitle)
 			createTitle(book, sheet, configs);
 
 		int rowNum = firstDataRowNum;
 		for (T data : list) {
 			Row row = sheet.createRow(rowNum++);
-			writeRow(book, sheet, row, configs, data);
+			writeRow(book, sheet, row, data);
 		}
 
 		for (ColumnConfiguration config : configs) {

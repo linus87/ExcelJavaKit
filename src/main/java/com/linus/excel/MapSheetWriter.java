@@ -1,6 +1,5 @@
 package com.linus.excel;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -27,36 +26,32 @@ import com.linus.excel.validation.RangeColumnConstraint;
  * @author lyan2
  */
 public class MapSheetWriter extends AbstractSheetWriter<Map<String, Object>> {
-	private final Logger logger = Logger.getLogger(MapSheetWriter.class.getName());
-	private Map<Integer, CellStyle> styleMapping = new HashMap<Integer, CellStyle>();
+    private final Logger logger = Logger.getLogger(MapSheetWriter.class.getName());
+    
+	public MapSheetWriter(Workbook book, List<ColumnConfiguration> configs) {
+        super(book, configs);
+    }
 
 	@Override
-	public void writeRow(Workbook book, Sheet sheet, Row row, List<ColumnConfiguration> configs, Map<String, Object> map) {
+	public void writeRow(Workbook book, Sheet sheet, Row row, Map<String, Object> map) {
 		for (ColumnConfiguration config : configs) {
 			if (config != null) {
-				CellStyle cellStyle = styleMapping.get(config.getColumnIndex());
-				if (cellStyle == null) {
-					cellStyle = book.createCellStyle();
-					cellStyle.setLocked(!config.getWritable());
-					cellStyle.setFont(defaultFont);
-					cellStyle.setWrapText(true);
-					styleMapping.put(config.getColumnIndex(), cellStyle);
-				}
+				CellStyle cellStyle = this.getDataCellStyle(config.getColumnIndex());
 				createCell(book, sheet, row, config, map.get(config.getKey()), cellStyle);
 			}
 		}
 	}
 
 	@Override
-	public void writeSheet(Workbook book, Sheet sheet, List<ColumnConfiguration> configs,
-			List<Map<String, Object>> list, boolean hasTitle) {
+	public void writeSheet(Workbook book, Sheet sheet, List<Map<String, Object>> list, boolean hasTitle) {
+	    
 		if (hasTitle)
 			createTitle(book, sheet, configs);
 
 		int rowNum = firstDataRowNum;
 		for (Map<String, Object> map : list) {
 			Row row = sheet.createRow(rowNum++);
-			writeRow(book, sheet, row, configs, map);
+			writeRow(book, sheet, row, map);
 		}
 
 		for (ColumnConfiguration config : configs) {
@@ -131,13 +126,8 @@ public class MapSheetWriter extends AbstractSheetWriter<Map<String, Object>> {
 	@Override
 	public void createTitle(Workbook book, Sheet sheet, List<ColumnConfiguration> configs) {
 		Row row = sheet.createRow(firstDataRowNum++);
-		CellStyle headerStyle = book.createCellStyle();
-		headerStyle.setAlignment(HorizontalAlignment.CENTER);
-		headerStyle.setFillForegroundColor(IndexedColors.LIME.getIndex());
-		headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-		headerStyle.setFont(titleFont);
-		headerStyle.setWrapText(true);
-
+		CellStyle headerStyle = this.getHeaderCellStyle();
+		
 		for (ColumnConfiguration config : configs) {
 			if (config != null) {
 				createCell(book, sheet, row, config.getColumnIndex(), config.getTitle(), headerStyle);
@@ -159,14 +149,6 @@ public class MapSheetWriter extends AbstractSheetWriter<Map<String, Object>> {
 				createCell(book, sheet, row, config.getColumnIndex(), config.getLabel(), headerStyle);
 			}
 		}
-	}
-
-	public int getFirstDataRowNum() {
-		return firstDataRowNum;
-	}
-
-	public void setFirstDataRowNum(int firstDataRowNum) {
-		this.firstDataRowNum = firstDataRowNum;
 	}
 
 	/**

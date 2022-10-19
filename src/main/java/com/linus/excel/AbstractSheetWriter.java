@@ -14,41 +14,89 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.DataValidation;
+import org.apache.poi.ss.usermodel.DataValidationConstraint;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Name;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddressList;
+import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.xssf.usermodel.XSSFDataValidationHelper;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 import com.linus.date.DateUtil;
 import com.linus.excel.util.StringUtil;
 import com.linus.excel.validation.ColumnConstraint;
 import com.linus.excel.validation.DoubleColumnConstraint;
 
+/**
+ * Generate a sheet, just contains title and data. Please create a new instance of this class for each sheet.
+ * @author lyan2
+ *
+ * @param <T>
+ */
 public abstract class AbstractSheetWriter<T> implements ISheetWriter<T> {
 	
 	private final Logger logger = Logger.getLogger(AbstractSheetWriter.class.getName());
 	
 	protected int firstDataRowNum = 0;
 	
-	/**
-	 * Cache for data cell styles.
-	 */
-	protected Map<Integer, CellStyle> dataCellStyleMapping = new HashMap<Integer, CellStyle>();
+	protected Workbook book;
+	
+	protected final List<ColumnConfiguration> configs;
 	
 	protected CellStyle headerCellStyle = null;
 	
+	protected Font defaultFont;
+	
+	protected String optionsSheetName = "options";
+	
 	/**
-	 * Solve the maximum number of Cell Styles was exceeded issue.
-	 * @param book
+     * Cache for data cell styles. For plain object's field, this is fixed.
+     */
+    protected Map<Integer, CellStyle> dataCellStyleMapping = new HashMap<Integer, CellStyle>(1);
+	
+    public AbstractSheetWriter(Workbook book, List<ColumnConfiguration> configs) {
+        super();
+        this.book = book;
+        this.configs = configs;
+        initDefault(book, configs);
+    }
+    
+    protected void initDefault(Workbook book, List<ColumnConfiguration> configs) {
+        Font ft1 = book.createFont();
+        ft1.setFontName("Arial");
+        ft1.setFontHeightInPoints((short) 12);
+        defaultFont = ft1;
+        
+        for (ColumnConfiguration config : configs) {
+            if (config != null) {
+                CellStyle cellStyle = dataCellStyleMapping.get(config.getColumnIndex());
+                if (cellStyle == null) {
+                    cellStyle = book.createCellStyle();
+                    cellStyle.setLocked(!config.getWritable());
+                    cellStyle.setWrapText(true);
+                    cellStyle.setFont(ft1);
+                    
+                    dataCellStyleMapping.put(config.getColumnIndex(), cellStyle);
+                }
+            }
+        }
+    }
+    
+    /**
 	 * @param columnIndex
-	 * @return
+	 * @return a default style if not set.
 	 */
-	protected CellStyle getHeaderCellStyle(Workbook book) {
+	public CellStyle getHeaderCellStyle() {
 		if (headerCellStyle == null) {
+		    // default header cell style
 			headerCellStyle = book.createCellStyle();
 			headerCellStyle.setAlignment(HorizontalAlignment.CENTER);
 			headerCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
@@ -65,39 +113,36 @@ public abstract class AbstractSheetWriter<T> implements ISheetWriter<T> {
 		return headerCellStyle;
 	}
 	
-	/**
-	 * Solve the maximum number of Cell Styles was exceeded issue.
-	 * @param book
-	 * @param columnIndex
-	 * @return
-	 */
-	protected CellStyle getDataCellStyle(Workbook book, int columnIndex) {
-		CellStyle cellStyle = dataCellStyleMapping.get(columnIndex);
-		if (cellStyle == null) {
-			cellStyle = book.createCellStyle();
-			cellStyle.setAlignment(HorizontalAlignment.CENTER);
-			// cellStyle.setLocked(config.getWritable());
-			Font ft1 = book.createFont();
-			ft1.setFontName("Arial");
-			ft1.setFontHeightInPoints((short) 12);
-			cellStyle.setFont(ft1);
-			dataCellStyleMapping.put(columnIndex, cellStyle);
-		}
-		
-		return cellStyle;
+	public void setHeaderCellStyle(CellStyle cellStyle) {
+	    this.headerCellStyle = cellStyle;
 	}
+	
+	public void setDataCellStyleMapping(Map<Integer, CellStyle> dataCellStyleMapping) {
+        if (dataCellStyleMapping != null) {
+            this.dataCellStyleMapping = dataCellStyleMapping;
+        }
+    }
+
+    /**
+     * Solve the maximum number of Cell Styles was exceeded issue.
+     * @param book
+     * @param columnIndex
+     * @return
+     */
+    public CellStyle getDataCellStyle(int columnIndex) {
+        CellStyle cellStyle = dataCellStyleMapping.get(columnIndex);
+        return cellStyle;
+    }
 	
 	protected void createTitle(Workbook book, Sheet sheet,
 			List<ColumnConfiguration> configs) {
 		// remain a row for appeal explanation before title row
 		Row row = sheet.createRow(firstDataRowNum++);
 		
-		CellStyle headerStyle = getHeaderCellStyle(book);
-
 		for (ColumnConfiguration config : configs) {
 			if (config != null) {
 				createCell(book, sheet, row, config.getColumnIndex(),
-						config.getTitle(), headerStyle);
+						config.getTitle(), getHeaderCellStyle());
 			}
 		}
 	}
@@ -433,23 +478,61 @@ public abstract class AbstractSheetWriter<T> implements ISheetWriter<T> {
 			cell.setCellType(CellType.BLANK);
 		}
 	}
+	
+	public void createOptions(List<String> values, String optionName, String optionLabel) {
+        Sheet sheet = book.getSheet(optionsSheetName);
+        if (sheet == null) {
+            sheet = book.createSheet(optionsSheetName);
+        }
+        
+        Name namedArea = book.createName();
+        namedArea.setNameName(optionName);
+        
+        Row optionLabelRow = sheet.createRow(0);
+        int columnIndex = optionLabelRow.getLastCellNum() + 1;
+        optionLabelRow.createCell(columnIndex).setCellValue(optionLabel);
+        
+        int rowIndex = 1;
+        
+        for (String value : values) {
+            Row row = sheet.createRow(rowIndex++);
+            row.createCell(columnIndex).setCellValue(value);
+        }
+        
+        String colStr = CellReference.convertNumToColString(columnIndex);
+        String formular = String.format("%s!$%s$2:$%s$%d", sheet.getSheetName(), colStr, colStr, rowIndex);
+        namedArea.setRefersToFormula(formular);
+    }
+	
+	public void createDropdown(Workbook wb, Sheet sheet, int columnIndex, String optionsName) {
+        XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper((XSSFSheet) sheet);
+        
+        DataValidationConstraint constraint = dvHelper.createFormulaListConstraint(optionsName);
+        
+        CellRangeAddressList addressList = new CellRangeAddressList(1,  sheet.getLastRowNum(), columnIndex, columnIndex);
+        DataValidation dv = dvHelper.createValidation(constraint, addressList);
+        sheet.addValidationData(dv);
+    }
+	
+	public int getFirstDataRowNum() {
+        return firstDataRowNum;
+    }
 
-	protected Font defaultFont;
-	protected Font titleFont;
+    public void setFirstDataRowNum(int firstDataRowNum) {
+        this.firstDataRowNum = firstDataRowNum;
+    }
 
-	public Font getDefaultFont() {
-		return defaultFont;
-	}
+    public void setDefaultFont(Font defaultFont) {
+        this.defaultFont = defaultFont;
+    }
 
-	public void setDefaultFont(Font defaultFont) {
-		this.defaultFont = defaultFont;
-	}
+    public String getOptionsSheetName() {
+        return optionsSheetName;
+    }
 
-	public Font getTitleFont() {
-		return titleFont;
-	}
-
-	public void setTitleFont(Font titleFont) {
-		this.titleFont = titleFont;
-	}
+    public void setOptionsSheetName(String optionsSheetName) {
+        if (optionsSheetName !=null) {
+            this.optionsSheetName = optionsSheetName;
+        }
+    }
 }

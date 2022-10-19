@@ -24,16 +24,20 @@ public class PojoSheetWriterTest {
 
 	@Test
 	public void pojoToExcelTest() throws IntrospectionException, IOException {
-		PojoSheetWriter<User> writer = new PojoSheetWriter<User>();
+		
 		Workbook wb = new XSSFWorkbook();
 		Sheet sheet = wb.createSheet("Detail");
 		
 		ArrayList<ColumnConfiguration> configs = ColumnConfigurationParserForPojo.getColumnConfigurations(
 				User.class, Locale.SIMPLIFIED_CHINESE, ResourceBundle.getBundle("sheet_header", Locale.SIMPLIFIED_CHINESE));
 		
-		writer.writeSheet(wb, sheet, configs, getUserList(), false);
+		PojoSheetWriter<User> writer = new PojoSheetWriter<User>(wb, configs);
+		writer.writeSheet(wb, sheet, getUserList(), false);
 		
 		File file = new File("excel/pojo/user.xlsx");
+		if (!file.exists()) {
+            file.createNewFile();
+        }
 		FileOutputStream fos = new FileOutputStream(file);
 		wb.write(fos);
 	}

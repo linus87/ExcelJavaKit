@@ -6,8 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -16,19 +14,19 @@ import org.junit.Test;
 
 import com.linus.excel.ArrayListSheetWriter;
 import com.linus.excel.ColumnConfiguration;
-import com.linus.excel.po.User;
-import com.linus.excel.util.ColumnConfigurationParserForPojo;
 
 public class ArrayListSheetWriterTest {
 
 	@Test
 	public void pojoToExcelTest() throws IntrospectionException, IOException {
-		ArrayListSheetWriter<String> writer = new ArrayListSheetWriter<String>();
+		
 		Workbook wb = new XSSFWorkbook();
 		Sheet sheet = wb.createSheet("Detail");
 		
 		ArrayList<ColumnConfiguration> configs = getColumnConfigs();
-		writer.writeSheet(wb, sheet, configs, getUserList(), true);
+		
+		ArrayListSheetWriter<String> writer = new ArrayListSheetWriter<String>(wb, configs);
+		writer.writeSheet(wb, sheet, getUserList(), true);
 		
 		File file = new File("excel/test/user.xlsx");
 		if (!file.exists()) {

@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
-import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -25,8 +24,6 @@ import com.linus.excel.MapSheetWriter;
 import com.linus.excel.util.ColumnConfigurationParserForJson;
 import com.linus.excel.validation.ColumnConstraint;
 import com.linus.excel.validation.NotNullColumnConstraint;
-
-import javafx.scene.text.FontWeight;
 
 public class ExcelWriterTest {
 	private final Logger logger = Logger.getLogger(ExcelWriterTest.class.getName());
@@ -47,7 +44,7 @@ public class ExcelWriterTest {
 		FileOutputStream fos = new FileOutputStream(file);
 		Workbook wb = new XSSFWorkbook();
 
-		MapSheetWriter sheetWriter = new MapSheetWriter();
+		
 		Sheet sheet = wb.createSheet();
 
 		// read configuration
@@ -55,6 +52,8 @@ public class ExcelWriterTest {
 		JsonNode tree = mapper.readTree(configFile);
 		ArrayList<ColumnConfiguration> configs = ColumnConfigurationParserForJson.getColumnConfigurations((ArrayNode) tree, Locale.CHINA);
 		adjustColumnConfigurations(configs);
+		
+		MapSheetWriter sheetWriter = new MapSheetWriter(wb, configs);
 
 		// read data
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -67,21 +66,8 @@ public class ExcelWriterTest {
 		// adjust configuration
 		preHandleData(configs, list);
 
-		// set font
-
-		Font ft = wb.createFont();
-		ft.setFontName("Arial");
-		ft.setFontHeightInPoints((short) 9);
-		sheetWriter.setDefaultFont(ft);
-		
-		Font titleFont = wb.createFont();
-		titleFont.setFontName("Arial");
-		titleFont.setFontHeightInPoints((short) 9);
-		titleFont.setBold(true);
-		sheetWriter.setTitleFont(titleFont);
-
 		// write to excel
-		sheetWriter.writeSheet(wb, sheet, configs, list, true);
+		sheetWriter.writeSheet(wb, sheet, list, true);
 		sheetWriter.freeze(sheet, 0, sheetWriter.getFirstDataRowNum());
 		sheetWriter.setProtectionPassword(sheet, "123456");
 

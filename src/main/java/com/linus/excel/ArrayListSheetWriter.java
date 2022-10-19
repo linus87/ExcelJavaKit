@@ -18,18 +18,22 @@ import com.linus.excel.validation.RangeColumnConstraint;
 
 public class ArrayListSheetWriter<T> extends AbstractSheetWriter<T[]> {
 
-	@Override
-	public void writeRow(Workbook book, Sheet sheet, Row row, List<ColumnConfiguration> configs, T[] array) {
+	public ArrayListSheetWriter(Workbook book, List<ColumnConfiguration> configs) {
+        super(book, configs);
+    }
+
+    @Override
+	public void writeRow(Workbook book, Sheet sheet, Row row, T[] array) {
 		for (ColumnConfiguration config : configs) {
 			if (config != null) {
-				CellStyle cellStyle = getDataCellStyle(book, config.getColumnIndex());
+				CellStyle cellStyle = getDataCellStyle(config.getColumnIndex());
 				createCell(book, sheet, row, config, array[config.getColumnIndex()], cellStyle);
 			}
 		}
 	}
 
 	@Override
-	public void writeSheet(Workbook book, Sheet sheet, List<ColumnConfiguration> configs, List<T[]> list,
+	public void writeSheet(Workbook book, Sheet sheet, List<T[]> list,
 			boolean hasTitle) {
 		if (hasTitle)
 			createTitle(book, sheet, configs);
@@ -37,7 +41,7 @@ public class ArrayListSheetWriter<T> extends AbstractSheetWriter<T[]> {
 		int rowNum = firstDataRowNum;
 		for (T[] data : list) {
 			Row row = sheet.createRow(rowNum++);
-			writeRow(book, sheet, row, configs, data);
+			writeRow(book, sheet, row, data);
 		}
 
 		for (ColumnConfiguration config : configs) {

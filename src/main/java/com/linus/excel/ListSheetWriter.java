@@ -17,11 +17,14 @@ import org.apache.poi.ss.usermodel.Workbook;
  * @author lyan2
  */
 public class ListSheetWriter extends AbstractSheetWriter<List<Object>> {
-	private final Logger logger = Logger.getLogger(ListSheetWriter.class.getName());
-	private int firstDataRowNum = 0;
+    private final Logger logger = Logger.getLogger(ListSheetWriter.class.getName());
+    
+	public ListSheetWriter(Workbook book, List<ColumnConfiguration> configs) {
+        super(book, configs);
+    }
 
 	@Override
-	public void writeRow(Workbook book, Sheet sheet, Row row, List<ColumnConfiguration> configs, List<Object> list) {
+	public void writeRow(Workbook book, Sheet sheet, Row row, List<Object> list) {
 		CellStyle cellStyle = book.createCellStyle();
 		cellStyle.setFont(defaultFont);
 		
@@ -32,7 +35,7 @@ public class ListSheetWriter extends AbstractSheetWriter<List<Object>> {
 	}
 
 	@Override
-	public void writeSheet(Workbook book, Sheet sheet, List<ColumnConfiguration> configs, List<List<Object>> list,
+	public void writeSheet(Workbook book, Sheet sheet, List<List<Object>> list,
 			boolean hasTitle) {
 		if (hasTitle)
 			createTitle(book, sheet, configs);
@@ -40,7 +43,7 @@ public class ListSheetWriter extends AbstractSheetWriter<List<Object>> {
 		int rowNum = firstDataRowNum;
 		for (List<Object> array : list) {
 			Row row = sheet.createRow(rowNum);
-			writeRow(book, sheet, row, configs, array);
+			writeRow(book, sheet, row, array);
 			rowNum++;
 		}
 
@@ -49,12 +52,7 @@ public class ListSheetWriter extends AbstractSheetWriter<List<Object>> {
 	@Override
 	public void createTitle(Workbook book, Sheet sheet, List<ColumnConfiguration> configs) {
 		Row row = sheet.createRow(firstDataRowNum++);
-		CellStyle headerStyle = book.createCellStyle();
-		headerStyle.setAlignment(HorizontalAlignment.CENTER);
-		headerStyle.setFillForegroundColor(IndexedColors.LIME.getIndex());
-		headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-		headerStyle.setFont(titleFont);
-		headerStyle.setWrapText(true);
+		CellStyle headerStyle = this.getHeaderCellStyle();
 
 		for (ColumnConfiguration config : configs) {
 			if (config != null) {
@@ -81,38 +79,7 @@ public class ListSheetWriter extends AbstractSheetWriter<List<Object>> {
 		}
 	}
 
-	/**
-	 * Freeze some columns and rows.
-	 * 
-	 * @param sheet
-	 * @param freezeRows
-	 * @param freezeCols
-	 * @param password
-	 */
-	public void freeze(Sheet sheet, int freezeCols, int freezeRows) {
-		sheet.createFreezePane(freezeCols, freezeRows);
-	}
-
-	/**
-	 * Hide a column.
-	 * 
-	 * @param sheet
-	 * @param hiddenCol
-	 */
-	public void hideColumn(Sheet sheet, int hiddenCol) {
-		sheet.setColumnHidden(hiddenCol, true);
-	}
-
-	public int getFirstDataRowNum() {
-		return firstDataRowNum;
-	}
-
-	public void setFirstDataRowNum(int firstDataRowNum) {
-		this.firstDataRowNum = firstDataRowNum;
-	}
-
 	private Font defaultFont;
-	private Font titleFont;
 
 	public Font getDefaultFont() {
 		return defaultFont;
@@ -122,12 +89,4 @@ public class ListSheetWriter extends AbstractSheetWriter<List<Object>> {
 		this.defaultFont = defaultFont;
 	}
 
-	public Font getTitleFont() {
-		return titleFont;
-	}
-
-	public void setTitleFont(Font titleFont) {
-		this.titleFont = titleFont;
-	}
-	
 }
