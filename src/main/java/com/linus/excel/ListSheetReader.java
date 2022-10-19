@@ -152,24 +152,24 @@ public class ListSheetReader extends AbstractSheetReader<List<Object>> {
 				+ ", property type " + type);
 		
 		switch (cell.getCellType()) {
-		case Cell.CELL_TYPE_BLANK: return null;
-		case Cell.CELL_TYPE_ERROR: return null;
-		case Cell.CELL_TYPE_NUMERIC:
-			return readFromNumberCell(cell, type);
-		case Cell.CELL_TYPE_STRING:
-			return readFromStringCell(cell, type);
-		case Cell.CELL_TYPE_BOOLEAN: 
-			Boolean value = cell.getBooleanCellValue();
-			if (Boolean.class.isAssignableFrom(type)) {
-				return value;
-			} else {
-				return value.toString();
-			}
-		case Cell.CELL_TYPE_FORMULA:
-			return cell.getCellFormula();
-		default: 
-			return null;
-		}
+        case BLANK: return null;
+        case ERROR: return null;
+        case NUMERIC:
+            return readFromNumberCell(cell, type);
+        case STRING:
+            return readFromStringCell(cell, type);
+        case BOOLEAN: 
+            Boolean value = cell.getBooleanCellValue();
+            if (Boolean.class.isAssignableFrom(type)) {
+                return value;
+            } else {
+                return value.toString();
+            }
+        case FORMULA:
+            return cell.getCellFormula();
+        default: 
+            return null;
+        }
 	}
 	
 	/**

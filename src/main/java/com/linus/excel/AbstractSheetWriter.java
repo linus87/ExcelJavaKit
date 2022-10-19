@@ -267,7 +267,7 @@ public abstract class AbstractSheetWriter<T> implements ISheetWriter<T> {
 		if (value != null) {
 			cell.setCellValue(value.toString());
 		} else {
-			cell.setCellType(CellType.BLANK);
+		    cell.setBlank();
 		}
 
 		style.setDataFormat(HSSFDataFormat.getBuiltinFormat("text"));
@@ -295,7 +295,7 @@ public abstract class AbstractSheetWriter<T> implements ISheetWriter<T> {
 		} else if (value != null) {
 			cell.setCellValue(value.toString());
 		}  else {
-			cell.setCellType(CellType.BLANK);
+		    cell.setBlank();
 		}
 		
 	}
@@ -358,7 +358,7 @@ public abstract class AbstractSheetWriter<T> implements ISheetWriter<T> {
 				}
 			}
 		} else {
-			cell.setCellType(Cell.CELL_TYPE_BLANK);
+			cell.setBlank();
 		}
 	}
 	
@@ -391,7 +391,7 @@ public abstract class AbstractSheetWriter<T> implements ISheetWriter<T> {
 				}
 			}
 		} else {
-			cell.setCellType(CellType.BLANK);
+		    cell.setBlank();
 		}
 	}
 
@@ -422,7 +422,7 @@ public abstract class AbstractSheetWriter<T> implements ISheetWriter<T> {
 				cell.setCellValue(DateUtil.formatISODate(date.getTime(), null));
 			}
 		} else {
-			cell.setCellType(CellType.BLANK);
+		    cell.setBlank();
 		}
 	}
 
@@ -451,7 +451,7 @@ public abstract class AbstractSheetWriter<T> implements ISheetWriter<T> {
 			date.setTimeInMillis((long) value);
 			cell.setCellValue(DateUtil.formatISODateTime(date.getTime(), null));
 		} else {
-			cell.setCellType(Cell.CELL_TYPE_BLANK);
+		    cell.setBlank();
 		}
 	}
 
@@ -475,7 +475,7 @@ public abstract class AbstractSheetWriter<T> implements ISheetWriter<T> {
 		} else if (value instanceof String && value != null) {
 			cell.setCellValue((String) value);
 		} else {
-			cell.setCellType(CellType.BLANK);
+		    cell.setBlank();
 		}
 	}
 	

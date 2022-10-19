@@ -58,15 +58,15 @@ public abstract class AbstractSheetReader<T> implements ISheetReader<T> {
 		if (cell == null) return null;
 		
 		switch (cell.getCellType()) {
-		case Cell.CELL_TYPE_BLANK: return null;
-		case Cell.CELL_TYPE_ERROR: return null;
-		case Cell.CELL_TYPE_NUMERIC:
+		case BLANK: return null;
+		case ERROR: return null;
+		case NUMERIC:
 			return cell.getNumericCellValue();
-		case Cell.CELL_TYPE_STRING:
+		case STRING:
 			return cell.getStringCellValue();
-		case Cell.CELL_TYPE_BOOLEAN: 
+		case BOOLEAN: 
 			return cell.getBooleanCellValue();
-		case Cell.CELL_TYPE_FORMULA:
+		case FORMULA:
 			return cell.getCellFormula();
 		default: 
 			return null;
@@ -86,20 +86,20 @@ public abstract class AbstractSheetReader<T> implements ISheetReader<T> {
 				+ ", property type " + type);
 		
 		switch (cell.getCellType()) {
-		case Cell.CELL_TYPE_BLANK: return null;
-		case Cell.CELL_TYPE_ERROR: return null;
-		case Cell.CELL_TYPE_NUMERIC:
+		case BLANK: return null;
+		case ERROR: return null;
+		case NUMERIC:
 			return readFromNumberCell(cell, type);
-		case Cell.CELL_TYPE_STRING:
+		case STRING:
 			return readFromStringCell(cell, type);
-		case Cell.CELL_TYPE_BOOLEAN: 
+		case BOOLEAN: 
 			Boolean value = cell.getBooleanCellValue();
 			if (Boolean.class.isAssignableFrom(type)) {
 				return value;
 			} else {
 				return value.toString();
 			}
-		case Cell.CELL_TYPE_FORMULA:
+		case FORMULA:
 			return cell.getCellFormula();
 		default: 
 			return null;
