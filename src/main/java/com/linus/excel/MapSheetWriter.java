@@ -141,7 +141,7 @@ public class MapSheetWriter extends AbstractSheetWriter<Map<String, Object>> {
 		headerStyle.setAlignment(HorizontalAlignment.CENTER);
 		headerStyle.setFillForegroundColor(IndexedColors.LIME.getIndex());
 		headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-		headerStyle.setFont(this.defaultFont);
+		headerStyle.setFont(this.dataCellFont);
 		headerStyle.setWrapText(true);
 
 		for (ColumnConfiguration config : configs) {
@@ -165,7 +165,7 @@ public class MapSheetWriter extends AbstractSheetWriter<Map<String, Object>> {
 		CellStyle style = book.createCellStyle();
 		style.setLocked(true);
 		style.setWrapText(true);
-		style.setFont(defaultFont);
+		style.setFont(dataCellFont);
 
 		for (ColumnConfiguration config : configs) {
 			if (config != null) {

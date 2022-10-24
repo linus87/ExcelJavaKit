@@ -23,6 +23,7 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Name;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.SheetVisibility;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddressList;
@@ -53,7 +54,7 @@ public abstract class AbstractSheetWriter<T> implements ISheetWriter<T> {
 	
 	protected CellStyle headerCellStyle = null;
 	
-	protected Font defaultFont;
+	protected Font dataCellFont;
 	
 	protected String optionsSheetName = "options";
 	
@@ -70,10 +71,12 @@ public abstract class AbstractSheetWriter<T> implements ISheetWriter<T> {
     }
     
     protected void initDefault(Workbook book, List<ColumnConfiguration> configs) {
-        Font ft1 = book.createFont();
-        ft1.setFontName("Arial");
-        ft1.setFontHeightInPoints((short) 12);
-        defaultFont = ft1;
+        if (this.dataCellFont == null) {
+            Font ft1 = book.createFont();
+            ft1.setFontName("Arial");
+            ft1.setFontHeightInPoints((short) 12);
+            dataCellFont = ft1;
+        }
         
         for (ColumnConfiguration config : configs) {
             if (config != null) {
@@ -82,7 +85,7 @@ public abstract class AbstractSheetWriter<T> implements ISheetWriter<T> {
                     cellStyle = book.createCellStyle();
                     cellStyle.setLocked(!config.getWritable());
                     cellStyle.setWrapText(true);
-                    cellStyle.setFont(ft1);
+                    cellStyle.setFont(dataCellFont);
                     
                     dataCellStyleMapping.put(config.getColumnIndex(), cellStyle);
                 }
@@ -483,6 +486,7 @@ public abstract class AbstractSheetWriter<T> implements ISheetWriter<T> {
         Sheet sheet = book.getSheet(optionsSheetName);
         if (sheet == null) {
             sheet = book.createSheet(optionsSheetName);
+            book.setSheetVisibility(book.getSheetIndex(optionsSheetName), SheetVisibility.HIDDEN);
         }
         
         Name namedArea = book.createName();
@@ -520,10 +524,6 @@ public abstract class AbstractSheetWriter<T> implements ISheetWriter<T> {
 
     public void setFirstDataRowNum(int firstDataRowNum) {
         this.firstDataRowNum = firstDataRowNum;
-    }
-
-    public void setDefaultFont(Font defaultFont) {
-        this.defaultFont = defaultFont;
     }
 
     public String getOptionsSheetName() {
