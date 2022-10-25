@@ -482,7 +482,7 @@ public abstract class AbstractSheetWriter<T> implements ISheetWriter<T> {
 		}
 	}
 	
-	public void createOptions(List<String> values, String optionName, String optionLabel) {
+	public void createOptions(List<String> values, String optionName) {
         Sheet sheet = book.getSheet(optionsSheetName);
         if (sheet == null) {
             sheet = book.createSheet(optionsSheetName);
@@ -494,7 +494,7 @@ public abstract class AbstractSheetWriter<T> implements ISheetWriter<T> {
         
         Row optionLabelRow = sheet.createRow(0);
         int columnIndex = optionLabelRow.getLastCellNum() + 1;
-        optionLabelRow.createCell(columnIndex).setCellValue(optionLabel);
+        optionLabelRow.createCell(columnIndex).setCellValue(optionName);
         
         int rowIndex = 1;
         
@@ -513,8 +513,11 @@ public abstract class AbstractSheetWriter<T> implements ISheetWriter<T> {
         
         DataValidationConstraint constraint = dvHelper.createFormulaListConstraint(optionsName);
         
-        CellRangeAddressList addressList = new CellRangeAddressList(1,  sheet.getLastRowNum(), columnIndex, columnIndex);
+        CellRangeAddressList addressList = new CellRangeAddressList(firstDataRowNum,  sheet.getLastRowNum(), columnIndex, columnIndex);
         DataValidation dv = dvHelper.createValidation(constraint, addressList);
+        // Display pick list when user click the cell.
+        dv.setSuppressDropDownArrow(true);
+        dv.setShowErrorBox(true);
         sheet.addValidationData(dv);
     }
 	

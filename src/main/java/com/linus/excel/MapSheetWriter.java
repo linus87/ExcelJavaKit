@@ -1,8 +1,8 @@
 package com.linus.excel;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -26,7 +26,6 @@ import com.linus.excel.validation.RangeColumnConstraint;
  * @author lyan2
  */
 public class MapSheetWriter extends AbstractSheetWriter<Map<String, Object>> {
-    private final Logger logger = Logger.getLogger(MapSheetWriter.class.getName());
     
 	public MapSheetWriter(Workbook book, List<ColumnConfiguration> configs) {
         super(book, configs);
@@ -72,23 +71,10 @@ public class MapSheetWriter extends AbstractSheetWriter<Map<String, Object>> {
 					// only support single
 					if (((RangeColumnConstraint) constraint).isAllowMultiple()) break;
 					
-					XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper((XSSFSheet) sheet);
-					XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint)
-					    dvHelper.createExplicitListConstraint(((RangeColumnConstraint) constraint).getPickList());
-
-					CellRangeAddressList addressList = new CellRangeAddressList(firstDataRowNum,  sheet.getLastRowNum(), config.getColumnIndex(), config.getColumnIndex());
-					XSSFDataValidation validation =(XSSFDataValidation)dvHelper.createValidation(dvConstraint, addressList);
-
-					// Display pick list when user click the cell.
-					validation.setSuppressDropDownArrow(true);
-
-					// Note this extra method call. If this method call is
-					// omitted, or if the
-					// boolean value false is passed, then Excel will not
-					// validate the value the
-					// user enters into the cell.
-					validation.setShowErrorBox(((RangeColumnConstraint) constraint).getMustInRange());
-					sheet.addValidationData(validation);
+					List<String> options = Arrays.asList(((RangeColumnConstraint) constraint).getPickList());
+					this.createOptions(options, config.getKey());
+					this.createDropdown(book, sheet, config.getColumnIndex(), config.getKey());
+					
 					break;
 				}
 
