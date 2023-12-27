@@ -41,7 +41,6 @@ public interface ISheetWriter<T> {
 	 * @param book
 	 * @param sheet
 	 * @param row
-	 * @param configs
 	 * @param map
 	 */
 	public void writeRow(Workbook book, Sheet sheet, Row row, T map);
@@ -50,7 +49,6 @@ public interface ISheetWriter<T> {
 	 * Fill sheet with data from list. Argument configs contains the configuration information of each column.
 	 * @param book
 	 * @param sheet
-	 * @param configs
 	 * @param list
 	 * @param hasTitle
 	 */

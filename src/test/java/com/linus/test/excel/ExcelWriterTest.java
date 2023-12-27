@@ -48,7 +48,7 @@ public class ExcelWriterTest {
 		Sheet sheet = wb.createSheet();
 
 		// read configuration
-		File configFile = new File(ExcelTest.class.getResource("config/configuration.json").getFile());
+		File configFile = new File(ExcelTest.class.getResource("/config/configuration.json").getFile());
 		JsonNode tree = mapper.readTree(configFile);
 		ArrayList<ColumnConfiguration> configs = ColumnConfigurationParserForJson.getColumnConfigurations((ArrayNode) tree, Locale.CHINA);
 		adjustColumnConfigurations(configs);
@@ -57,7 +57,7 @@ public class ExcelWriterTest {
 
 		// read data
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		File dataFile = new File(ExcelTest.class.getResource("data/data.json").getFile());
+		File dataFile = new File(ExcelTest.class.getResource("/data/data.json").getFile());
 		JsonNode dataJson = mapper.readTree(dataFile);
 		System.out.println(dataJson.toString());
 
