@@ -54,7 +54,7 @@ public class User {
 	public void setAge(Integer age) {
 		this.age = age;
 	}
-	@Header(columnIndex=3, )
+	@Header(columnIndex=3, title = "Gender")
 	public Gender getGender() {
 		return gender;
 	}

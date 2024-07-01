@@ -4,6 +4,7 @@ import com.linus.excel.ColumnConfiguration;
 import com.linus.excel.PojoSheetWriter;
 import com.linus.excel.po.User;
 import com.linus.excel.util.ColumnConfigurationParserForPojo;
+import com.linus.excel.validation.RangeColumnConstraint;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -15,45 +16,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
-public class BigDropdownListTest {
+public class PojoDropdownListTest {
 
-  private String[] options = {"EF/OC",
-          "WINIT",
-          "GOODCANG",
-          "4PX",
-          "ARMLOGI",
-          "AYBASES",
-          "CATHY LOGISTIC",
-          "CHINA POST",
-          "Chukou1",
-          "CONTINENTAL",
-          "DEWELL",
-          "DISCOVERY",
-          "ECOF",
-          "EDAEU",
-          "EDAYUN",
-          "EUCASHBOX",
-          "GENIQUA",
-          "GIGA",
-          "GOODCHAINS",
-          "JW",
-          "LECANGS",
-          "LLP",
-          "MBB",
-          "NEWEGG",
-          "PANEXWD",
-          "PRIMEROAD",
-          "QXBOX",
-          "RYLH",
-          "SENDEX",
-          "SUNWARD",
-          "WEDO SCM",
-          "WESTERN POST",
-          "OTHERS",
-          "JDL",
-          "JINDA",
-          "Heloo",
-          "World"};
+  private String[] genderOptions = {"Male", "Female"};
 
   @Test
   public void test() throws IntrospectionException, IOException {
@@ -64,14 +29,21 @@ public class BigDropdownListTest {
     ArrayList<ColumnConfiguration> configs = ColumnConfigurationParserForPojo.getColumnConfigurations(
             User.class, Locale.SIMPLIFIED_CHINESE, null);
 
+    for (ColumnConfiguration config : configs) {
+      if ("gender".equals(config.getKey())) {
+        RangeColumnConstraint rangeColumnConstraint = new RangeColumnConstraint();
+        rangeColumnConstraint.setMustInRange(true);
+        rangeColumnConstraint.setPickList(genderOptions);
+        config.setConstraints(Arrays.asList(rangeColumnConstraint));
+        break;
+      }
+    }
+
     PojoSheetWriter<User> writer = new PojoSheetWriter<User>(wb, configs);
 
-    writer.createOptions(Arrays.asList(options), "warehouse");
-
     writer.writeSheet(wb, sheet, getUserList(), true);
-    writer.createDropdown(wb, sheet, 1, "warehouse");
 
-    File file = new File("excel/pojo/bigdropdown.xlsx");
+    File file = new File("excel/pojo/dropdown.xlsx");
     if (!file.exists()) {
       file.createNewFile();
     }
