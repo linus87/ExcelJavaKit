@@ -33,7 +33,7 @@ public class User {
 	
 	@NotNull
 	@Size(max=64)
-	@Header(columnIndex=0)
+	@Header(title = "First Name", columnIndex=0)
 	public String getFirstName() {
 		return firstName;
 	}
@@ -54,7 +54,7 @@ public class User {
 	public void setAge(Integer age) {
 		this.age = age;
 	}
-	@Header(columnIndex=3)
+	@Header(columnIndex=3, )
 	public Gender getGender() {
 		return gender;
 	}

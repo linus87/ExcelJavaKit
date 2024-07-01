@@ -48,13 +48,9 @@ public class PojoSheetWriterTest {
 		User u = new User();
 		u.setAge(18);
 		u.setBirthday(new Date());
-		u.setEmail("lyan@ebay.com");
+		u.setEmail("linus.yan@hotmail.com");
 		
 		list.add(u);
-		
-		u.setAge(25);
-		u.setBirthday(new Date());
-		u.setEmail("lyan2@ebay.com");
 		
 		return list;
 	}

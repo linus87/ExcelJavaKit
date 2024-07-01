@@ -37,8 +37,12 @@ public class ColumnConfigurationParserForPojo {
 				Header h = descriptor.getReadMethod().getAnnotation(Header.class);
 				if (h != null) {
 					ColumnConfiguration config = new ColumnConfiguration();
-					config.setTitle(bundle.getString(h.title()));
-					
+					if (bundle != null && bundle.containsKey(h.title())) {
+						config.setTitle(bundle.getString(h.title()));
+					} else {
+						config.setTitle(h.title());
+					}
+
 					config.setKey(descriptor.getName());
 					config.setColumnIndex(h.columnIndex());
 					config.setWritable(h.writable());

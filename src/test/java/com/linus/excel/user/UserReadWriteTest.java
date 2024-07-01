@@ -107,9 +107,9 @@ public class UserReadWriteTest {
 		
 		ISheetWriter<Map<String, Object>> sheetWriter = new MapSheetWriter(wb, configs);
 		List<Map<String, Object>> users = new ArrayList<Map<String, Object>>(3);
-		users.add(mapper.convertValue(createUser("Linus", "Yan", 30, Gender.MALE, "lyan2@ebay.com", BigDecimal.ONE, "yes", true, new Date(), "error", new Time(Calendar.getInstance().getTimeInMillis()), 0.1, Calendar.getInstance()), Map.class));
-		users.add(mapper.convertValue(createUser("Linus", "Yan", 30, Gender.MALE, "lyan2@ebay.com", BigDecimal.ONE, "yes", true, new Date(), "error", new Time(Calendar.getInstance().getTimeInMillis()), 0.1, Calendar.getInstance()), Map.class));
-		users.add(mapper.convertValue(createUser("Linus", "Yan", 30, Gender.MALE, "lyan2@ebay.com", BigDecimal.ONE, "yes", true, new Date(), "error", new Time(Calendar.getInstance().getTimeInMillis()), 0.1, Calendar.getInstance()), Map.class));
+		users.add(mapper.convertValue(createUser("Linus", "Yan", 30, Gender.MALE, "linus.yan@hotmail.com", BigDecimal.ONE, "yes", true, new Date(), "error", new Time(Calendar.getInstance().getTimeInMillis()), 0.1, Calendar.getInstance()), Map.class));
+		users.add(mapper.convertValue(createUser("Linus", "Yan", 30, Gender.MALE, "linus.yan@hotmail.com", BigDecimal.ONE, "yes", true, new Date(), "error", new Time(Calendar.getInstance().getTimeInMillis()), 0.1, Calendar.getInstance()), Map.class));
+		users.add(mapper.convertValue(createUser("Linus", "Yan", 30, Gender.MALE, "linus.yan@hotmail.com", BigDecimal.ONE, "yes", true, new Date(), "error", new Time(Calendar.getInstance().getTimeInMillis()), 0.1, Calendar.getInstance()), Map.class));
 		
 		sheetWriter.writeSheet(wb, sheet, users, true);
 		
